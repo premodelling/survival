@@ -1,0 +1,9 @@
+Package: survival
+Type: Package
+Title: CHIC601 Project
+Version: 1.0
+Date: 2021-12-29
+Author: 36112985
+Maintainer: 36112985
+Description: Survival Modelling & Analysis
+License:
