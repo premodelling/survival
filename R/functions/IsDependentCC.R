@@ -20,15 +20,14 @@ IsDependentCC <- function(variables, reference, frame) {
 
     # Are the elements of the fields independent?
     # Null Hypothesis: Independent elements
-    chisquared <- chisq.test(frequencies, simulate.p.value = TRUE, B = 5000)
+    chisquared <- chisq.test(frequencies, simulate.p.value = FALSE, rescale.p = FALSE, B = 2000)
 
     # What is the degree of association between the elements of the fields?
     cramercinq <- rcompanion::cramerV(frequencies, y = NULL, ci = FALSE, conf = 0.95, type = 'bca',
                                       R = 1000, histogram = FALSE, digits = 4, bias.correct = TRUE)
 
     # Add the estimates to the table of estimates
-    calculations <- data.table(field = variable, chi_squared_statistic = chisquared$statistic,
-                               pvalue = chisquared$p.value, cramerv = cramercinq)
+    calculations <- data.table(field = variable, cramerv = cramercinq)
     estimates <- rbind(estimates, calculations)
   }
 
