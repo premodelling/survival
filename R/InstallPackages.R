@@ -10,7 +10,7 @@ InstallPackages <- function (){
   # healthcareai: Machine learning toolbox for health care. Interests: stratified splitting via split_train_test(), etc.
   # EpiEstim: Reproduction numbers of epidemics. (https://cran.r-project.org/web/packages/EpiEstim/index.html)
   packages <- c('tidyverse', 'data.table', 'ggplot2', 'rmarkdown', 'rstatix', 'latex2exp', 'moments', 'healthcareai',
-                'equatiomatic', 'survival', 'survminer', 'EpiEstim', 'rticles', 'ggcorrplot', 'rcompanion')
+                'equatiomatic', 'survival', 'survminer', 'EpiEstim', 'rticles', 'ggcorrplot', 'rcompanion', 'patchwork')
 
   # Install
   .install <- function(x){
@@ -26,7 +26,14 @@ InstallPackages <- function (){
     library(x, character.only = TRUE)
     if (x == 'rmarkdown') {library(tinytex)}
   }
+
+  # Activating
   lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic'))], .activate)
+
+  # Special Case
+  if ('tidyverse' %in% packages) {
+    lapply(X = c('magrittr', 'dplyr', 'tibble', 'ggplot2', 'stringr'), .activate)
+  }
 
   # Active libraries
   sessionInfo()
