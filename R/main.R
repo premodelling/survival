@@ -71,7 +71,8 @@ ggplot(data = numbers, mapping = aes(x = group, y = frequency)) +
 
 
 
-# tests of associations
+# investigating plausible reasons for the miising values
+# the resulting matrix suggests that, at a bare minimum we have a few MAR cases
 predictors <- c('sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
             'neurological', 'liver_mod_severe', 'malignant_neoplasm')
 instances <- data[, !(names(date) %in% 'admission_date')]
@@ -84,12 +85,10 @@ data.frame(t(details))
 
 
 # degree of correlation between predictors
-# mapply
-# pivot
 # ggcorrplot
-x <- IsDependentCC(variables = predictors, reference = 'renal', frame = data)
 
-
+design <- mapply(FUN = IsDependentCC, reference = predictors, MoreArgs = list(variables = predictors, frame = data))
+measures <- data.frame(design)
 
 
 
