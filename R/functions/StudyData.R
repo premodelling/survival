@@ -64,8 +64,8 @@ StudyData <- function () {
 
   # right censored: 1, 0
   # outcome: alive, deceased
-  # data$censored <- dplyr::if_else(data$outcome == 'Death', true = 0, false = 1)
-  # table(data$outcome, data$censored)
+  data$censored <- dplyr::if_else(data$outcome == 'Death', true = 0, false = 1)
+  table(data$outcome, data$censored)
 
   # outcome date
   data$outcome_date <- as.Date(data$outcome_date)
@@ -73,6 +73,9 @@ StudyData <- function () {
     missing <- sum(is.na(data$outcome_date))
     print(paste0('There are missing outcome dates: ', missing, ' missing'))
   }
+
+  # time_to_event
+  data$time_to_outcome <- as.integer(data$outcome_date - data$admission_date)
 
   return(data)
 
