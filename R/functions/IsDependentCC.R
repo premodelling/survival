@@ -22,11 +22,15 @@ IsDependentCC <- function(variables, reference, frame) {
                                       R = 1000, histogram = FALSE, digits = 4, bias.correct = TRUE)
 
     # Add the estimates to the table of estimates
-    estimates[1, variable] <- cramercinq
+    estimates[1, variable] <- as.numeric(cramercinq)
   }
 
-  row.names(estimates) <- reference
+  skeleton <- t(data.frame(unlist(estimates)))
+  rownames(skeleton) <- reference
+  T <- data.frame(skeleton)
+  print(T)
+  print(class(T))
 
-  return(estimates)
+  return(list(item = T))
 
 }
