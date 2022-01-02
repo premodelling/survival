@@ -24,11 +24,6 @@ AdmissionsNHS <- function () {
   readings <- tibble::column_to_rownames(readings, var = 'age_group')
 
   # set dates as index
-  readings <- t(readings)
-
-
-
-
-
+  readings <- as.data.frame(t(readings))
 
 }
