@@ -1,4 +1,4 @@
-# Title     : PredictorTest.R
+# Title     : MechanismTest.R
 # Objective : Investigate and understand plausible missing data patterns
 # Created by: greyhypotheses
 # Created on: 01/01/2022
