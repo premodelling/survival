@@ -6,7 +6,8 @@
 
 #' EstimatesONS
 #'
-#' Reads the female &male population of England encoded in 'data/ukpopestimatesmid2020on2021geography.xls
+#' @description Reads the female &male population of England
+#'              encoded in 'data/ukpopestimatesmid2020on2021geography.xls
 #'
 EstimatesONS <- function () {
 
