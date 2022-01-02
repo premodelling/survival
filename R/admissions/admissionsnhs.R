@@ -12,7 +12,7 @@ AdmissionsNHS <- function () {
   get_ <- function (age_group) {
     age_group
     readxl::read_xlsx(path = 'data/Covid-Publication-13-08-2020.xlsx',
-                      sheet = str_glue('Admissions {age_group}'),
+                      sheet = stringr::str_glue('Admissions {age_group}'),
                       range = 'F13:ER14')
 
   }
