@@ -18,7 +18,9 @@ str(data)
 
 #' NA Patterns
 #'
-
+PatterInstanceNA(data = data)
+PatternDendogramNA(data = data)
+PatternVariableNA(data = data)
 
 #' NA of predictor ~ model variables
 #' Investigating associations between NA series and [model + auxiliary] variables
