@@ -78,7 +78,6 @@ PatterInstanceNA <- function (data) {
     xlab('\n NA per patient') +
     ylab('\nfrequency\n')
 
-
 }
 
 
