@@ -10,7 +10,8 @@ InstallPackages <- function (){
   # healthcareai: Machine learning toolbox for health care. Interests: stratified splitting via split_train_test(), etc.
   # EpiEstim: Reproduction numbers of epidemics. (https://cran.r-project.org/web/packages/EpiEstim/index.html)
   packages <- c('tidyverse', 'data.table', 'ggplot2', 'rmarkdown', 'rstatix', 'latex2exp', 'moments', 'healthcareai',
-                'equatiomatic', 'survival', 'survminer', 'EpiEstim', 'rticles', 'ggcorrplot', 'rcompanion', 'patchwork')
+                'equatiomatic', 'survival', 'survminer', 'EpiEstim', 'rticles', 'ggcorrplot', 'rcompanion',
+                'patchwork', 'readxl')
 
   # Install
   .install <- function(x){
