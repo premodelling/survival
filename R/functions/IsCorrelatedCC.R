@@ -1,10 +1,10 @@
-# Title     : IsDependentCC.R
+# Title     : IsCorrelatedCC.R
 # Objective : Correlation analysis w.r.t. categorical variables
 # Created by: greyhypotheses
 # Created on: 01/01/2022
 
 
-IsDependentCC <- function(variables, reference, frame) {
+IsCorrelatedCC <- function(variables, reference, frame) {
   #' Returns a table of test statistic, p, & Cramér's V values
   #'
   #' @param variables: The list of categorical variables that will be compared with the reference variable
