@@ -6,7 +6,7 @@
 IsRepresentative <- function () {
 
   source(file = 'R/functions/StudyData.R')
-  source(file = 'R/populations/aggregatingons.R')
+  source(file = 'R/demographics/aggregatingons.R')
 
 
   # Study
