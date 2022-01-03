@@ -77,6 +77,17 @@ StudyData <- function () {
   # time_to_event
   data$time_to_outcome <- as.integer(data$outcome_date - data$admission_date)
 
+  # implausible observations
+  condition <- data$time_to_outcome < 0 & !is.na(data$time_to_outcome)
+  negatives <- data[condition, ]
+
+  # do not retain implausible observations
+  data <- data[!condition,]
+
+
+  paste('There are ', nrow(negatives), ' implausible observations; omitted.')
+
+
   return(data)
 
 }
