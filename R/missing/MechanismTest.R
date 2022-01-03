@@ -13,7 +13,7 @@
 #' 
 #' @return
 #' 
-PredictorTest <- function (predictor, instances){
+MechanismTest <- function (predictor, instances){
 
   # create the missing indicator w.r.t. predictor `predictor`
   focus <- instances %>%
