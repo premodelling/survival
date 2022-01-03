@@ -28,7 +28,8 @@ PatternVariableNA(data = data)
 #' NA of predictor ~ model variables
 #' Investigating associations between NA series and [model + auxiliary] variables
 #'
-#' ... at a bare minimum we have a few MAR cases
+#' ... at a bare minimum, the are a few MAR cases
+#' ... no discernible associations with auxiliary variables
 #'
 variables <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 'renal',
                'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
