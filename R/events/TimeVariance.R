@@ -4,6 +4,13 @@
 # Created on: 03/01/2022
 
 
+#' TimeVariance
+#'
+#' @note Apply jitter to the box plots.
+#'       Conduct multi-Levene tests
+#'
+#' @param data: data
+#'
 TimeVariance <- function (data) {
 
 
