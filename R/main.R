@@ -8,6 +8,7 @@
 source(file = 'R/functions/StudyData.R')
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
+source(file = 'R/missing/CorrelationOfPredictors.R')
 
 
 # the data set
@@ -21,6 +22,8 @@ str(data)
 PatterInstanceNA(data = data)
 PatternDendogramNA(data = data)
 PatternVariableNA(data = data)
+
+
 
 #' NA of predictor ~ model variables
 #' Investigating associations between NA series and [model + auxiliary] variables
