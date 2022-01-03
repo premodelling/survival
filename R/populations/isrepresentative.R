@@ -5,8 +5,13 @@
 
 IsRepresentative <- function () {
 
+  source(file = 'R/functions/StudyData.R')
+  source(file = 'R/populations/aggregatingons.R')
+
 
   # Study
+  data <- StudyData()
+
   distribution <- data %>%
     select(age_group, sex) %>%
     group_by(age_group, sex) %>%
@@ -19,11 +24,12 @@ IsRepresentative <- function () {
   study <- distribution %>%
     select(!'unknown') %>%
     data.frame()
+  study$quotient <- study$female / study$male
+
 
   # Country
-
-
-
+  ons <- AggregatingONS()
+  ons$quotient <- ons$female / ons$male
 
 
 }
