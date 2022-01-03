@@ -6,7 +6,23 @@
 
 ### Notes
 
-Points:
+**NHS England COVID-19 Hospital Activity & ISARIC Study Excerpt**:
+
+It is probably impossible to compare the study's patient population to the NHS England patient population of the same
+time period.  There are a few reasons why
+
+* The COVID-19 Hospital Activity Data:
+  * Does not include a daily record of new COVID-19 patients admissions.  Instead, it continuously updates a number 
+    that denotes *the number of admitted COVID-19 patients that were still in hospital during the last 24 hours*
+  * Does not include in-hospital COVID-19 deaths.
+  * Has a different age groups demarcation: `[0  5]`, `[6  17]`, `[18  64]`, `[65  84]`, `85+`
+
+Therefore, for example, the discharges numbers of the Hospital Activity Data cannot be compared with those of the study
+because the baseline numbers that the discharges are relative to are unknown.
+
+<br>
+
+**Important Modelling & Analysis Points**:
 
 * Internal validation
 * External validation
@@ -14,7 +30,15 @@ Points:
 * Calibration plots
 
 <br>
+
+**Statistics**:
+
+* [Levene's Test](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35a.htm)
+
+
 <br>
+<br>
+
 
 ### Snippets
 
