@@ -6,10 +6,11 @@
 
 TimeData <- function (data) {
   excerpt <- data %>%
-    filter(!is.na(time_to_outcome))
+    filter(!is.na(time_to_outcome) & !is.na(outcome))
   excerpt$censored <- factor(x = excerpt$censored,
                              levels = c(0, 1, NA),
                              labels = c('uncensored', 'censored', 'unknown'), exclude = NULL)
+  return(excerpt)
 }
 
 
