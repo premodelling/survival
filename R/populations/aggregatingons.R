@@ -3,13 +3,16 @@
 # Created by: greyhypotheses
 # Created on: 02/01/2022
 
-source(file = 'R/populations/estimatesons.R')
+
 
 #' AggregatingONS
 #'
 #' @description Determines the population numbers per age groups of interest
 #'
 AggregatingONS <- function () {
+
+  source(file = 'R/populations/estimatesons.R')
+
 
   # get the population data
   readings <- EstimatesONS()
@@ -39,5 +42,7 @@ AggregatingONS <- function () {
     select(age_group, Female, Male) %>%
     group_by(age_group) %>%
     summarise(female = sum(Female), male = sum(Male))
+
+  return(aggregates)
 
 }
