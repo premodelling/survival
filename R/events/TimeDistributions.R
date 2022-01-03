@@ -1,4 +1,4 @@
-# Title     : Time.R
+# Title     : TimeDistributions.R
 # Objective : Time to event patterns
 # Created by: greyhypotheses
 # Created on: 03/01/2022
@@ -71,6 +71,7 @@ TimeHistogramOutcome <- function (data) {
           plot.caption = element_text(hjust = 0, size = 11, colour = 'darkgrey'),
           axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11),
           axis.title.x = element_text(size = 13), axis.title.y = element_text(size = 13)) +
+    ylab(label = '\ncount\n') +
     xlab(label = '\ntime to outcome\n')
 
 }
@@ -91,6 +92,7 @@ TimeHistogramCensor <- function (data) {
           plot.caption = element_text(hjust = 0, size = 11, colour = 'darkgrey'),
           axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11),
           axis.title.x = element_text(size = 13), axis.title.y = element_text(size = 13)) +
+    ylab(label = '\ncount\n') +
     xlab(label = '\ntime to outcome\n')
 
 }
