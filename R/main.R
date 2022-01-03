@@ -9,11 +9,28 @@ source(file = 'R/functions/StudyData.R')
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
 source(file = 'R/missing/CorrelationOfPredictors.R')
+source(file = 'R/events/TimeDistributions.R')
+source(file = 'R/events/TimeVariance.R')
 
 
 # the data set
 data <- StudyData()
 str(data)
+
+
+
+#' The Distribution Patterrns of Event Times
+#'
+TimeDensityCensor(data = data)
+TimeDensityOutcome(data = data)
+TimeHistogramCensor(data = data)
+TimeHistogramOutcome(data = data)
+
+
+
+#' Illustrating Spreads
+#'
+TimeVariance(data = data)
 
 
 
@@ -43,12 +60,19 @@ details <- mapply(FUN = MechanismTest, predictor = focus,
 data.frame(t(details))
 
 
+
 #' Correlation
 #'
 CorrelationOfPredictors(
   predictors = c('age_group', 'sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
                  'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
   data = data)
+
+
+
+
+
+
 
 
 
