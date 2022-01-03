@@ -3,33 +3,51 @@
 # Created by: greyhypotheses
 # Created on: 03/01/2022
 
+
 IsRepresentative <- function () {
 
-  source(file = 'R/functions/StudyData.R')
+
+  source(file = 'R/demographics/aggregatingstudy.R')
   source(file = 'R/demographics/aggregatingons.R')
 
 
-  # Study
-  data <- StudyData()
-
-  distribution <- data %>%
-    select(age_group, sex) %>%
-    group_by(age_group, sex) %>%
-    summarise(N = n(), .groups = 'drop')
-
-  distribution <- tidyr::pivot_wider(data = distribution, id_cols = 'age_group',
-                                     names_from = 'sex', values_from = 'N')
-  distribution <- dplyr::rename(distribution, male = Male, female = Female, unknown = 'NA')
-
-  study <- distribution %>%
+  # ISARIC Study
+  study <- AggregatingStudy()
+  study <- study %>%
     select(!'unknown') %>%
     data.frame()
-  study$quotient <- study$female / study$male
+  study$Study <- study$female / study$male
 
 
-  # Country
+  # ONS: England
   ons <- AggregatingONS()
-  ons$quotient <- ons$female / ons$male
+  ons$England <- ons$female / ons$male
+
+
+  # A table of the Female/Male quotient values w.r.t. the study & ONS
+  quotients <- study %>%
+    select(age_group, Study)
+  quotients <- dplyr::left_join(x = quotients, y = ons[, c('age_group', 'England')], by = 'age_group')
+  quotients$age_group <- factor(x = quotients$age_group,
+                                levels = c('0-9', '10-19', '20-29', '30-39', '40-49', '50-59',
+                                           '60-69', '70-79', '80-89', '90+'),
+                                ordered = TRUE)
+
+
+  # Illustrate
+  # Per age group, the female/male ratio of the study is lower than that of the reference population
+  quotients %>%
+    gather(key = 'Case', value = 'Female/Male Ratio', -age_group) %>%
+    ggplot() +
+    geom_bar(mapping = aes(x = age_group, y = `Female/Male Ratio`, fill = Case),
+             stat = 'identity', position = position_dodge2(), alpha = 0.35) +
+    theme_minimal() +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major = element_line(size = 0.15),
+          axis.title.x = element_text(size = 13), axis.title.y = element_text(size = 13),
+          axis.text.x = element_text(size = 11, angle = 90), axis.text.y = element_text(size = 11)) +
+    xlab(label = '\nage group\n') +
+    ylab(label = '\nfemale/male\npopulation ratio\n')
 
 
 }
