@@ -22,25 +22,12 @@ because the baseline numbers that the discharges are relative to are unknown.
 
 <br>
 
-**Illustrations**:
-
-* Time to outcome and variance tests matrix
-* Review NA
-
-<br>
-
 **Important Modelling & Analysis Points**:
 
 * Internal validation
 * External validation
 * C Indices
 * Calibration plots
-
-<br>
-
-**Statistics**:
-
-* [Levene's Test](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35a.htm)
 
 
 <br>
