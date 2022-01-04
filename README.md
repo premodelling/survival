@@ -29,6 +29,11 @@ because the baseline numbers that the discharges are relative to are unknown.
 * C Indices
 * Calibration plots
 
+<br>
+
+**Age Group, Sex, & Co-morbidities**
+
+
 
 <br>
 <br>
