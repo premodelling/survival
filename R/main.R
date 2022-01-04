@@ -6,9 +6,11 @@
 
 # programs
 source(file = 'R/functions/StudyData.R')
+source(file = 'R/functions/DiseaseNumbers.R')
+source(file = 'R/functions/DiseaseQuotients.R')
 source(file = 'R/functions/TemporalSplit.R')
-source(file = 'R/missing/Imputation.R')
 
+source(file = 'R/missing/Imputation.R')
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
 
@@ -91,24 +93,44 @@ testing <- dataframes$testing
 # run the MICE model
 imputation <- ImputationTraining(training = training)
 
+# which variables were imputations applied to
+methods <- imputation$method
+methods <- methods[!(methods == '')]
+variates <- names(methods)
 
 # unclass factors for arithmetic
 release <- function (field, piece) {
   unclass(piece[, field])
 }
 
+# For each of the variables that underwent imputation ...
+# Create a copy of training ...
+for (variate in variates) {
 
-# which variables were imputations applied to
-imputation$method
+  estimates <- dplyr::bind_rows(imputation$imp[variate])
+  numerals <- mapply(FUN = release, field = names(estimates), MoreArgs = list(piece = estimates))
+  reference <- data.frame(median = matrixStats::rowMedians(x = numerals))
+  row.names(reference) <- row.names(estimates)
+
+  # attributes(estimates$`1`)$levels
+  # reference$median <- factor(x = reference$median, levels = attributes(estimates$`1`)$levels)
+  # trainingcopy[row.names(reference), variate] <- reference$median
+
+}
 
 
-# For each of these variables ...
-estimates <- imputation$imp$sex
 
-reference <- mapply(FUN = release, field = names(estimates), MoreArgs = list(piece = estimates))
-reference %>%
-  rowwise() %>%
-  median()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
