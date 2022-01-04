@@ -22,6 +22,13 @@ because the baseline numbers that the discharges are relative to are unknown.
 
 <br>
 
+**Illustrations**:
+
+* Time to outcome and variance tests matrix
+* Review NA
+
+<br>
+
 **Important Modelling & Analysis Points**:
 
 * Internal validation
