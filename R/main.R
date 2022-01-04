@@ -6,11 +6,17 @@
 
 # programs
 source(file = 'R/functions/StudyData.R')
+source(file = 'R/functions/TemporalSplit.R')
+source(file = 'R/missing/Imputation.R')
+
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
+
 source(file = 'R/missing/CorrelationOfPredictors.R')
 source(file = 'R/events/TimeDistributions.R')
 source(file = 'R/events/TimeVariance.R')
+
+
 
 
 # the data set
@@ -19,7 +25,7 @@ str(data)
 
 
 
-#' The Distribution Patterrns of Event Times
+#' The Distribution Patterns of Event Times
 #'
 TimeDensityCensor(data = data)
 TimeDensityOutcome(data = data)
@@ -70,10 +76,39 @@ CorrelationOfPredictors(
 
 
 
+#' Splitting
+#'
+dataframes <- TemporalSplit(data = data)
+training <- dataframes$training
+testing <- dataframes$testing
 
 
 
+#' Imputation
+#' In progress
+#'
 
+# run the MICE model
+imputation <- ImputationTraining(training = training)
+
+
+# unclass factors for arithmetic
+release <- function (field, piece) {
+  unclass(piece[, field])
+}
+
+
+# which variables were imputations applied to
+imputation$method
+
+
+# For each of these variables ...
+estimates <- imputation$imp$sex
+
+reference <- mapply(FUN = release, field = names(estimates), MoreArgs = list(piece = estimates))
+reference %>%
+  rowwise() %>%
+  median()
 
 
 
