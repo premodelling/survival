@@ -21,7 +21,7 @@ ImputationVariables <- function () {
 #'
 ImputationTraining <- function (training) {
   variables <- ImputationVariables()
-  imputation <- mice::mice(data = training[, variables], m = 10, maxit = 10, seed = 5)
+  imputation <- mice::mice(data = training[, variables], m = 13, maxit = 10, seed = 5)
   return(imputation)
 }
 
@@ -34,7 +34,7 @@ ImputationTraining <- function (training) {
 ImputationTesting <- function (testing) {
   variables <- ImputationVariables()
   keys <- variables[!(variables %in% c('outcome', 'time_to_outcome'))]
-  imputation <- mice::mice(data = testing[, keys], m = 10, maxit = 10, seed = 5)
+  imputation <- mice::mice(data = testing[, keys], m = 13, maxit = 10, seed = 5)
   return(imputation)
 }
 
