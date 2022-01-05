@@ -100,6 +100,11 @@ testing <- dataframes$testing
 #' Imputation
 #' In progress
 #'
+
+# ... re-calculate ... censored, outcome_date, ... add ... deceased
+forimputation <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 'renal',
+                   'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
+                   'outcome', 'time_to_outcome')
 imputation <- ImputationTraining(training = training)
 training_ <- ImputationProcessing(imputation = imputation, imputationdata = training)
 
