@@ -6,7 +6,7 @@
 
 AgeGroupSexEvent <- function () {
 
-  source(file = 'R/functions/StudyData.R')
+  source(file = '../functions/StudyData.R')
   original <- StudyData()
 
   original %>%
