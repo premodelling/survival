@@ -14,7 +14,7 @@ IsCorrelatedCC <- function(variables, reference, frame) {
   estimates <- data.frame()
   for (variable in variables) {
 
-    # contingency table
+    # contingency table, by default 'table' excludes NA counts (for NA counts ... useNA = 'always')
     frequencies <- table(frame[[variable]], frame[[reference]])
 
     # What is the degree of association between the elements of the fields?
