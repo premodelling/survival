@@ -6,24 +6,42 @@
 
 # programs
 source(file = 'R/functions/StudyData.R')
-source(file = 'R/functions/DiseaseNumbers.R')
-source(file = 'R/functions/DiseaseQuotients.R')
-source(file = 'R/functions/TemporalSplit.R')
+source(file = 'R/preliminaries/DiseaseNumbers.R')
+source(file = 'R/preliminaries/DiseaseQuotients.R')
+source(file = 'R/preliminaries/CorrelationOfPredictors.R')
+source(file = 'R/preliminaries/AgeGroupSexEvent.R')
 
+source(file = 'R/functions/TemporalSplit.R')
 source(file = 'R/missing/Imputation.R')
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
 
-source(file = 'R/missing/CorrelationOfPredictors.R')
 source(file = 'R/events/TimeDistributions.R')
 source(file = 'R/events/TimeVariance.R')
 
 
 
 
-# the data set
+#' The data set
+#'
 data <- StudyData()
 str(data)
+
+
+
+#' Explorations
+AgeGroupSexEvent()
+DiseaseQuotients(field = 'pulmonary')
+DiseaseNumbers(field = 'pulmonary')
+
+
+
+#' Correlation
+#'
+CorrelationOfPredictors(
+  predictors = c('age_group', 'sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
+                 'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
+  data = data)
 
 
 
@@ -69,14 +87,6 @@ data.frame(t(details))
 
 
 
-#' Correlation
-#'
-CorrelationOfPredictors(
-  predictors = c('age_group', 'sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
-                 'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
-  data = data)
-
-
 
 #' Splitting
 #'
@@ -117,20 +127,6 @@ for (variate in variates) {
   # trainingcopy[row.names(reference), variate] <- reference$median
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
