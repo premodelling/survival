@@ -6,8 +6,12 @@
 
 AgeGroupSexEvent <- function () {
 
-  source(file = '../functions/StudyData.R')
+  source(file = 'R/functions/StudyData.R')
   original <- StudyData()
+
+  original$age_group <- factor(x = original$age_group,
+                              levels = c('30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90+'),
+                              ordered = TRUE)
 
   original %>%
     filter(!is.na(outcome) & !is.na(time_to_outcome) & !is.na(sex)) %>%
