@@ -5,9 +5,6 @@
 
 DiseaseQuotients <- function (field, original) {
 
-  # source(file = '../functions/StudyData.R')
-  # original <- StudyData()
-
   excerpt <- original[, c('age_group', 'sex', field)]
 
   excerpt <- excerpt %>%
