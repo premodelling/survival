@@ -1,4 +1,4 @@
-# Title     : aggregatingons.R
+# Title     : AggregatingONS.R
 # Objective : Aggregating ONS population values
 # Created by: greyhypotheses
 # Created on: 02/01/2022
