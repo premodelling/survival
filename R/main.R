@@ -4,22 +4,17 @@
 # Created on: 29/12/2021
 
 
-# programs
-source(file = 'R/functions/StudyData.R')
-source(file = 'R/preliminaries/DiseaseNumbers.R')
-source(file = 'R/preliminaries/DiseaseQuotients.R')
-source(file = 'R/preliminaries/CorrelationOfPredictors.R')
-source(file = 'R/preliminaries/AgeGroupSexEvent.R')
 
-source(file = 'R/functions/TemporalSplit.R')
+#' Programs
+#'
+source(file = 'R/functions/StudyData.R')
+
 source(file = 'R/missing/Pattern.R')
 source(file = 'R/missing/MechanismTest.R')
+
+source(file = 'R/functions/TemporalSplit.R')
 source(file = 'R/missing/Imputation.R')
 source(file = 'R/missing/ImputationProcessing.R')
-
-source(file = 'R/events/TimeDistributions.R')
-source(file = 'R/events/TimeVariance.R')
-
 
 
 
@@ -27,37 +22,6 @@ source(file = 'R/events/TimeVariance.R')
 #'
 data <- StudyData()
 str(data)
-
-
-
-#' Explorations
-AgeGroupSexEvent()
-DiseaseQuotients(field = 'pulmonary')
-DiseaseNumbers(field = 'pulmonary')
-
-
-
-#' Correlation
-#'
-CorrelationOfPredictors(
-  predictors = c('age_group', 'sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
-                 'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
-  data = data)
-
-
-
-#' The Distribution Patterns of Event Times
-#'
-TimeDensityCensor(data = data)
-TimeDensityOutcome(data = data)
-TimeHistogramCensor(data = data)
-TimeHistogramOutcome(data = data)
-
-
-
-#' Illustrating Spreads
-#'
-TimeVariance(data = data)
 
 
 
@@ -100,13 +64,25 @@ testing <- dataframes$testing
 #' Imputation
 #' In progress
 #'
+#' ...  re-calculate: censored & outcome_date, and add deceased
+#' ...  the imputation variables exclude: outcome_date (date can't be used
+#'      in the MICE models, time_to _outcome in lieu), censored (it is a project
+#'      variable created for analysis & graphing purposes)
+imputationvariables <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 'renal',
+                         'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
+                         'outcome', 'time_to_outcome')
+initial <- training[, imputationvariables]
+imputation <- ImputationTraining(training = initial)
+training_ <- ImputationProcessing(imputation = imputation, imputationdata = initial)
+training_$outcome_date <- training_$admission_date + training_$time_to_outcome
+training_$censored <- dplyr::if_else(training_$outcome == 'Death', true = 0, false = 1)
+training_$deceased <- dplyr::if_else(training_$outcome == 'Death', true = 1, false = 0)
 
-# ... re-calculate ... censored, outcome_date, ... add ... deceased
-forimputation <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 'renal',
-                   'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
-                   'outcome', 'time_to_outcome')
-imputation <- ImputationTraining(training = training)
-training_ <- ImputationProcessing(imputation = imputation, imputationdata = training)
+# ensure that only missing date cells have imputed values
+states <- is.na(training_$outcome_date != training$outcome_date)
+unknown <- is.na(training$outcome_date)
+all(states == unknown)
+
 
 
 
