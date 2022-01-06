@@ -1,4 +1,4 @@
-# Title     : dischargesnhs.R
+# Title     : DischargesNHS.R
 # Objective : England's NHS COVID Discharges
 # Created by: greyhypotheses
 # Created on: 02/01/2022
