@@ -1,4 +1,4 @@
-# Title     : estimatesons.R
+# Title     : EstimatesONS.R
 # Objective : Extract the demographic data of interest from ONS Populations Estimates releases
 # Created by: greyhypotheses
 # Created on: 02/01/2022
