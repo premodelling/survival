@@ -1,4 +1,4 @@
-# Title     : aggregatingstudy.R
+# Title     : AggregatingStudy.R
 # Objective : TODO
 # Created by: greyhypotheses
 # Created on: 03/01/2022
