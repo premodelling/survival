@@ -10,7 +10,7 @@ Testing <- function (model_core, model_boosted, testing_)  {
   # calibration plot
   # AUC
   # sensitivity analysis
-  
+
   # Boosted
   external_boosted <- mboost::survFit(object = model_boosted, newdata = testing_ )
   # calibration plot
