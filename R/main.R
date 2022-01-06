@@ -53,12 +53,15 @@ data.frame(t(details))
 
 
 
+#' For the modelling programs
+#'
+
+
 #' Splitting
 #'
 dataframes <- TemporalSplit(data = data)
 training <- dataframes$training
 testing <- dataframes$testing
-
 
 
 #' Imputation
@@ -84,5 +87,31 @@ unknown <- is.na(training$outcome_date)
 all(states == unknown)
 
 
+
+#' Models
+#'
+object <- Surv(time = training_$time_to_outcome, event = training_$deceased)
+
+# optional
+null_kaplan_meier <- survfit(formula = object ~ 1, data = training_)
+ggsurvplot(fit = null_kaplan_meier, data = training_, pval = TRUE, conf.int = TRUE)
+
+age_group_kaplan_meier <- survfit(formula = object ~ age_group, data = training_)
+ggsurvplot(fit = age_group_kaplan_meier, data = training_, pval = TRUE, conf.int = TRUE)
+
+# Core: trial
+age_group_cox <- coxph(formula = object ~ age_group, data = training_)
+summary(object = age_group_cox)
+ggforest(model = age_group_cox, data = training_)
+
+
+# Core: COX Boosting (encompassing internal validation)
+
+
+# Core: Narrow external validation
+# survival::predict(object = age_group_cox, newdata = post imputation test data)
+# calibration plot
+# AUC
+# sensitivity analysis
 
 
