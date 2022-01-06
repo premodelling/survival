@@ -5,22 +5,13 @@
 
 
 
-#' Imputation: Training Data
+#' Imputation
 #'
 #' @param training: the training data set
 #'
-ImputationTraining <- function (training_) {
-  imputation <- mice::mice(data = training_, m = 13, maxit = 10, seed = 5)
+Imputation <- function (data) {
+  imputation <- mice::mice(data = data, m = 13, maxit = 10, seed = 5)
   return(imputation)
 }
 
 
-
-#' Imputation: Testing
-#'
-#' @param testing: The data set for testing
-#'
-ImputationTesting <- function (testing_) {
-  imputation <- mice::mice(data = testing_, m = 13, maxit = 10, seed = 5)
-  return(imputation)
-}
