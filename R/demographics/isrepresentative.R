@@ -1,4 +1,4 @@
-# Title     : isrepresentative.R
+# Title     : IsRepresentative.R
 # Objective : Determine whether the study demographics are representative of the demographics of the target population
 # Created by: greyhypotheses
 # Created on: 03/01/2022
