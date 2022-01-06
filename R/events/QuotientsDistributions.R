@@ -30,6 +30,7 @@ QuotientsData <- function (data) {
 
 }
 
+
 QuotientsCfAgeGroups <- function (data) {
 
   demarcations <- QuotientsData(data = data)
@@ -52,6 +53,7 @@ QuotientsCfAgeGroups <- function (data) {
     xlab(label = '\n')
 
 }
+
 
 QuotientsCfEvents <- function (data) {
 
