@@ -7,8 +7,8 @@
 IsRepresentative <- function () {
 
 
-  source(file = 'R/demographics/aggregatingstudy.R')
-  source(file = 'R/demographics/aggregatingons.R')
+  source(file = 'AggregatingStudy.R')
+  source(file = 'AggregatingONS.R')
 
 
   # ISARIC Study
