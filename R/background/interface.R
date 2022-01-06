@@ -7,10 +7,10 @@
 #' Programs
 source(file = 'R/functions/StudyData.R')
 
-source(file = 'R/preliminaries/AgeGroupSexEvent.R')
-source(file = 'R/preliminaries/DiseaseNumbers.R')
-source(file = 'R/preliminaries/DiseaseQuotients.R')
-source(file = 'R/preliminaries/CorrelationOfPredictors.R')
+source(file = 'R/background/AgeGroupSexEvent.R')
+source(file = 'R/background/DiseaseNumbers.R')
+source(file = 'R/background/DiseaseQuotients.R')
+source(file = 'R/background/CorrelationOfPredictors.R')
 
 source(file = 'R/events/QuotientsDistributions.R')
 source(file = 'R/events/TimeDistributions.R')
