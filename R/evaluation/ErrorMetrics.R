@@ -1,6 +1,6 @@
-# Title     : Error Metrics
-# Objective : Error Metrics
-# Created by:
+# Title     : ErrorMetrics.R
+# Objective : The error matrix metrics
+# Created by: greyhypotheses
 # Created on: 06/01/2022
 
 
