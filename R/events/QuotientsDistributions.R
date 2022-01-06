@@ -1,4 +1,4 @@
-# Title     : Quotients.R
+# Title     : QuotientsDistributions.R
 # Objective : Playground
 # Created by: greyhypotheses
 # Created on: 03/01/2022
