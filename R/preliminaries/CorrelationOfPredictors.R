@@ -7,6 +7,7 @@
 source(file = 'R/functions/IsCorrelatedCC.R')
 
 
+#' Correlation of predictors
 #'
 #' @description determines the degree of correlation between predictors via Cramer's V
 #'
