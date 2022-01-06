@@ -1,4 +1,4 @@
-# Title     : admissionsnhs.R
+# Title     : AdmissionsNHS.R
 # Objective : England's NHS COVID Admissions
 # Created by: greyhypotheses
 # Created on: 02/01/2022
