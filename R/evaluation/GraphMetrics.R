@@ -1,6 +1,6 @@
-# Title     : Graph Metrics
+# Title     : GraphMetrics.R
 # Objective : Graphs of error metrics
-# Created by: 
+# Created by:  greyhypotheses
 # Created on: 06/01/2022
 
 roc <- function (metrics) {
