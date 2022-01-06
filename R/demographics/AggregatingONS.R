@@ -11,7 +11,7 @@
 #'
 AggregatingONS <- function () {
 
-  source(file = 'R/demographics/estimatesons.R')
+  source(file = 'R/demographics/EstimatesONS.R')
 
 
   # get the population data
