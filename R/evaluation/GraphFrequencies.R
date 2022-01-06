@@ -1,6 +1,6 @@
-# Title     : Graph Frequencies
+# Title     : GraphFrequencies.R
 # Objective : Graphs of error frequencies
-# Created by:
+# Created by: greyhypotheses
 # Created on: 06/01/2022
 
 classified <- function (frequencies) {
