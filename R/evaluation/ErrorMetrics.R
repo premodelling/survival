@@ -4,6 +4,13 @@
 # Created on: 06/01/2022
 
 
+#' ErrorMetrics
+#'
+#' @description calculates a range of error matrix metrics
+#'
+#' @param frame: a data frame consisting of thresholds & error frequencies
+#' @param N: the number of observations, for validation steps
+#'
 ErrorMetrics <- function (frame, N) {
 
   #' Precision, Positive Predictive Value
