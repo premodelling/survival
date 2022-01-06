@@ -4,10 +4,7 @@
 # Created on: 04/01/2022
 
 
-DiseaseNumbers <- function (field) {
-
-  source(file = '../functions/StudyData.R')
-  original <- StudyData()
+DiseaseNumbers <- function (field, original) {
 
   excerpt <- original[, c('age_group', 'sex', field)]
 
