@@ -3,6 +3,11 @@
 # Created by: greyhypotheses
 # Created on: 06/01/2022
 
+
+#' classified
+#'
+#' @param frequencies: The frequncies of an error matrix
+#'
 classified <- function (frequencies) {
   frequencies %>%
     select(threshold, TN, TP) %>%
@@ -21,6 +26,11 @@ classified <- function (frequencies) {
     ylab('Matrix Frequency\n')
 }
 
+
+#' misclassified
+#'
+#' @param frequencies: The frequncies of an error matrix
+#'
 misclassified <- function (frequencies) {
   frequencies %>%
     select(threshold, FN, FP) %>%
