@@ -3,10 +3,10 @@
 # Created by: greyhypotheses
 # Created on: 04/01/2022
 
-DiseaseQuotients <- function (field) {
+DiseaseQuotients <- function (field, original) {
 
-  source(file = '../functions/StudyData.R')
-  original <- StudyData()
+  # source(file = '../functions/StudyData.R')
+  # original <- StudyData()
 
   excerpt <- original[, c('age_group', 'sex', field)]
 
@@ -20,7 +20,7 @@ DiseaseQuotients <- function (field) {
 
   wide <- pivot_wider(data = excerpt, id_cols = c('age_group', 'sex'),
                       names_from = (!!sym(field)), values_from = 'N')
-  wide$quotient <- wide$yes / wide$no
+  wide$quotient <- wide$yes / (wide$yes + wide$no)
 
   ggplot(data = wide, mapping = aes(x = age_group, y = quotient, fill = sex)) +
     geom_bar(stat = 'identity', alpha = 0.35, position = position_dodge2()) +
@@ -29,13 +29,15 @@ DiseaseQuotients <- function (field) {
           panel.grid.minor = element_blank(),
           panel.grid.major = element_line(size = 0.1),
           plot.title = element_text(hjust = 0.5),
+          plot.subtitle = element_text(face = 'bold', hjust = 0.5),
           strip.text.x = element_text(size = 11, face = 'bold'),
           plot.caption = element_text(hjust = 0, size = 11, colour = 'darkgrey'),
           axis.text.x = element_text(size = 11, angle = 90), axis.text.y = element_text(size = 11),
           axis.title.x = element_text(size = 13), axis.title.y = element_text(size = 13)) +
-    ylab(label = '\nyes/no ratio\n') +
+    ylab(label = '\nyes/(yes + no) fraction\n') +
     xlab(label = '\n') +
-    labs(title = str_glue('yes/no ratio\n{field}\n'))
+    labs(title = str_glue('The fraction of sufferers per age group & sex\n'),
+         subtitle = str_glue('\nComorbidity: {field}\n') )
 
 
 
