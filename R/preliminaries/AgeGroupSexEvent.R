@@ -5,7 +5,7 @@
 
 
 AgeGroupSexEvent <- function (original) {
-  
+
   original$age_group <- factor(x = original$age_group,
                               levels = c('30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90+'),
                               ordered = TRUE)
