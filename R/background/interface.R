@@ -12,9 +12,9 @@ source(file = 'R/background/DiseaseNumbers.R')
 source(file = 'R/background/DiseaseQuotients.R')
 source(file = 'R/background/CorrelationOfPredictors.R')
 
-source(file = 'R/events/QuotientsDistributions.R')
-source(file = 'R/events/TimeDistributions.R')
-source(file = 'R/events/TimeVariance.R')
+source(file = 'R/background/QuotientsDistributions.R')
+source(file = 'R/background/TimeDistributions.R')
+source(file = 'R/background/TimeVariance.R')
 
 
 #' The data set
