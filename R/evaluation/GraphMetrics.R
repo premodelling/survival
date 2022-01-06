@@ -3,6 +3,13 @@
 # Created by:  greyhypotheses
 # Created on: 06/01/2022
 
+
+#' roc
+#'
+#' @description receiver operating characteristics
+#'
+#' @param metrics: error matrix metrics
+#'
 roc <- function (metrics) {
 
   ggplot(data = metrics, mapping = aes(x = fpr, y = sensitivity)) +
@@ -21,7 +28,14 @@ roc <- function (metrics) {
 }
 
 
+#' special
+#'
+#' @description the curves of the error matrix metrics
+#'
+#' @param metrics: error matrix metrics
+#'
 special <- function (metrics) {
+
   metrics %>%
     select(threshold, precision, sensitivity, specifity, matthews, balanced_accuracy, standard_accuracy) %>%
     gather(key = 'Metric', value = 'value', -threshold) %>%
@@ -41,6 +55,13 @@ special <- function (metrics) {
 }
 
 
+
+#' accuracy
+#'
+#' @description the curves of the accuracy measures
+#'
+#' @param metrics: error matrix metrics
+#'
 accuracy <- function (metrics) {
   metrics %>%
     select(threshold, balanced_accuracy, standard_accuracy) %>%
