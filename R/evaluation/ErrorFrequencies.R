@@ -1,6 +1,6 @@
-# Title     : EF
-# Objective : EF
-# Created by:
+# Title     : ErrorFrequecies.R
+# Objective : The error matrix frequencies
+# Created by: greyhypotheses
 # Created on: 06/01/2022
 
 ErrorFrequencies <- function (thresholds, truth, probability) {
