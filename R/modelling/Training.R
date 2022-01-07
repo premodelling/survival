@@ -3,25 +3,45 @@
 # Created by: greyhypotheses
 # Created on: 06/01/2022
 
-Training <- function (training_) {
+Training <- function (training_, upload = TRUE) {
+
+
+  # the imputation object directory path
+  pathstr <- file.path(getwd(), 'warehouse', 'training', 'models')
 
 
   # formula
   formula <- Surv(time = training_$time_to_outcome, event = training_$deceased) ~ age_group + sex + asthma + 
     liver_mild + renal + pulmonary + neurological + liver_mod_severe + malignant_neoplasm
 
-  
-  # Core
-  model_core <- coxph(formula = formula , data = training_)
-  summary(object = model_core)
-  ggforest(model = model_core, data = training_)
+
+  # upload or run
+  if (upload) {
+
+    # Load
+    load(file.path(pathstr, 'unboosted'))
+    load(file.path(pathstr, 'boosted'))
+
+  } else {
+
+    # A directory for the resulting models
+    if (dir.exists(paths = pathstr)) {
+      base::unlink(pathstr, recursive = TRUE)
+    }
+    dir.create(path = pathstr, showWarnings = TRUE, recursive = TRUE)
+
+    # Core
+    unboosted <- coxph(formula = formula , data = training_)
+    save(unboosted, file = file.path(pathstr, 'unboosted'), ascii = TRUE, compress = TRUE, compression_level = 7)
 
 
-  # Boosted: encompassing internal validation
-  model <- mboost::glmboost(formula, data = training_,
-                   family = mboost::CoxPH(), control = mboost::boost_control(mstop = 500))
-  
-  internal <- mboost::survFit(model)
+    # Boosted: encompassing internal validation
+    boosted <- mboost::glmboost(formula, data = training_,
+                                family = mboost::CoxPH(), control = mboost::boost_control(mstop = 500))
+    save(boosted, file = file.path(pathstr, 'boosted'), ascii = TRUE, compress = TRUE, compression_level = 7)
 
+  }
+
+  return(list(unboosted = unboosted, boosted = boosted))
 
 }
