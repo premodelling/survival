@@ -10,6 +10,7 @@
 source(file = 'R/functions/StudyData.R')
 source(file = 'R/functions/TemporalSplit.R')
 source(file = 'R/modelling/ImputationStep.R')
+source(file = 'R/modelling/Training.R')
 
 
 #' The data set
@@ -53,6 +54,16 @@ kaplan_meier <- survfit(formula = Surv(time = training_$time_to_outcome, event =
 ggsurvplot(fit = kaplan_meier, data = training_, pval = TRUE, conf.int = TRUE)
 
 
+models <- Training(training_ = training_, upload = TRUE)
+unboosted <- models$unboosted
+boosted <- models$boosted
+rm(models)
+
+summary(object = unboosted)
+ggforest(model = unboosted, data = training_)
+
+summary(object = boosted)
+plot(mboost::survFit(boosted), frame.plot = FALSE)
 
 
 
