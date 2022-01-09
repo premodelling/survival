@@ -3,7 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 09/01/2022
 
-ModelCOXPH <- function () {
+ModelCOXPH <- function (training_, upload = TRUE) {
 
   # the model object directory path
   pathstr <- file.path(getwd(), 'warehouse', 'training', 'models')
@@ -17,29 +17,26 @@ ModelCOXPH <- function () {
     liver_mild + renal + pulmonary + neurological + liver_mod_severe + malignant_neoplasm
 
 
-  # bootstrapping
-
-
   # upload or run
   if (upload) {
 
-    # Load
     load(file.path(pathstr, 'unboosted'))
 
   } else {
 
-    # A directory for the resulting models
+    # a directory for the resulting models
     if (file.exists(paths = file.path(pathstr, 'unboosted'))) {
       base::unlink(file.path(pathstr, 'unboosted'), recursive = TRUE)
     }
 
-    unboosted <- coxph(formula = formula , data = training_)
+    # modelling
+    initial <- coxph(formula = formula , data = training_, model = TRUE)
+    unboosted <- step(object = initial)
     save(unboosted, file = file.path(pathstr, 'unboosted'), ascii = TRUE, compress = TRUE, compression_level = 7)
 
   }
 
-  return
-
+  return(unboosted)
 
 
 }
