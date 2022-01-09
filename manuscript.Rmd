@@ -1,39 +1,20 @@
 ---
-title: Template for Oxford University Press papers
+title: Investigating factors that may influence COVID-19 survival
 author:
-  - name: Alpha Beta
-    email: alpha@university.ac.uk
-    corresponding_author: TRUE # Automatic footnote using corresponding_author
+  - name: 36112895
+    email: 36112895@lancaster.ac.uk
+    corresponding_author: TRUE
     affiliation:
-      - ABC
-      - DEF
-    biography: |
-      A researcher.
-      #    biography_pic: "/PATH/TO/image.png"
-      #    biography_pic_width: "1in"
-  - name: Beta Gamma
-    email: beta@university.ac.uk
-    affiliation: DEF
-    footnote: 1 # Footnote using reference
-  - name: Zeta Epsilon
-    email: zeta@institution.ac.uk
-    affiliation: XYZ
+      - A
     footnote:
-        - 1
-        - 2
+      - 1
 address:
-  - code: ABC
-    department: Department of Biology
-    organization: University
-  - code: DEF
-    address: University
-  - code: XYZ
-    address: Institution
+  - code: A
+    department: Lancaster Medical School
+    organization: University of Lancaster
 footnote:
   - code: 1
-    text: "Equal contribution"
-  - code: 2
-    text: "Current email address: [alpha@university.ac.uk](mailto:alpha@university.ac.uk)"
+    text: "Postgraduate Student"
 abstract:
   - "**Objective:**  To Investigate, and identify, the factors that may influence patient survival of coronavirus disease 19."
   - "More"
@@ -42,14 +23,6 @@ keywords:
   - mathematics
   - survival
   - prognostics
-competing_interests: |
-  There are no competing interest.
-author_contributions: |
-  Equal contributions
-acknowledgements: |
-  This is an acknowledgement.
-
-  It consists of two paragraphs.
 
 bibliography: manuscript/bibliography.bib # Includes refs in OUP example template
 # When using `citation_package = "default"`, a CSL file can be used
