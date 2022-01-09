@@ -6,8 +6,11 @@
 Training <- function (training_, upload = TRUE) {
 
 
-  # the imputation object directory path
+  # the model object directory path
   pathstr <- file.path(getwd(), 'warehouse', 'training', 'models')
+  if (!dir.exists(paths = pathstr)) {
+    dir.create(path = pathstr, showWarnings = TRUE, recursive = TRUE)
+  }
 
 
   # formula
@@ -19,21 +22,14 @@ Training <- function (training_, upload = TRUE) {
   if (upload) {
 
     # Load
-    load(file.path(pathstr, 'unboosted'))
     load(file.path(pathstr, 'boosted'))
 
   } else {
 
     # A directory for the resulting models
-    if (dir.exists(paths = pathstr)) {
-      base::unlink(pathstr, recursive = TRUE)
+    if (file.exists(paths = file.path(pathstr, 'boosted'))) {
+      base::unlink(file.path(pathstr, 'boosted'), recursive = TRUE)
     }
-    dir.create(path = pathstr, showWarnings = TRUE, recursive = TRUE)
-
-    # Core
-    unboosted <- coxph(formula = formula , data = training_)
-    save(unboosted, file = file.path(pathstr, 'unboosted'), ascii = TRUE, compress = TRUE, compression_level = 7)
-
 
     # Boosted: encompassing internal validation
     boosted <- mboost::glmboost(formula, data = training_,
@@ -42,6 +38,6 @@ Training <- function (training_, upload = TRUE) {
 
   }
 
-  return(list(unboosted = unboosted, boosted = boosted))
+  return(boosted)
 
 }
