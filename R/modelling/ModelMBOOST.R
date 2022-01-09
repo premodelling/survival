@@ -1,4 +1,4 @@
-# Title     : Training.R
+# Title     : ModelMBOOST.R
 # Objective : Training
 # Created by: greyhypotheses
 # Created on: 06/01/2022
