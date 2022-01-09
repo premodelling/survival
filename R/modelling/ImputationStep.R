@@ -53,8 +53,8 @@ ImputationStep <- function (initial, phase, upload = TRUE) {
   processed <- ImputationProcessing(imputation = imputation, imputationdata = initial)
   
   
-  # if training
-  if (phase == 'training') {
+  # if training, or perhaps either training/testing
+  if (phase == 'training' | phase == 'testing') {
     # outcome date
     processed$outcome_date <- processed$admission_date + processed$time_to_outcome
 
