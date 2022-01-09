@@ -1,9 +1,9 @@
 # Title     : ModelMBOOST.R
-# Objective : Training
+# Objective : Experimenting
 # Created by: greyhypotheses
 # Created on: 06/01/2022
 
-Training <- function (training_, upload = TRUE) {
+ModelMBOOST <- function (training_, upload = TRUE) {
 
 
   # the model object directory path
