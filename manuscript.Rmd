@@ -51,7 +51,7 @@ acknowledgements: |
 
   It consists of two paragraphs.
 
-bibliography: manuscript/mybibfile.bib # Includes refs in OUP example template
+bibliography: manuscript/bibliography.bib # Includes refs in OUP example template
 # When using `citation_package = "default"`, a CSL file can be used
 # csl: https://www.zotero.org/styles/oxford-university-press-note
 output:
