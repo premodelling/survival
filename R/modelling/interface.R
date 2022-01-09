@@ -53,11 +53,22 @@ training_ <- ImputationStep(initial = training[, variables],
 unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
 # testing
-testing_ <- ImputationStep(initial = testing[, variables[!(variables %in% dependent)]],
-                           phase = 'testing', upload = TRUE)
+evaluating_ <- testing[complete.cases(testing), ]
+testing_ <- ImputationStep(initial = testing[, variables],
+                           phase = 'testing', upload = FALSE)
 
-preliminary <- testing[complete.cases(testing), ]
-estimates <- predict(object = unboosted, newdata = preliminary, type = 'expected')
+
+
+
+# Play
+internal <- predict(object = unboosted, type = 'expected')
+internal <- data.frame(expected = internal)
+internal$lp <- predict(object = unboosted, type = 'lp')
+internal$risk_score <- predict(object = unboosted, type = 'risk')
+internal <- cbind(internal, as.data.frame(predict(object = unboosted, type = 'terms')))
+internal$survival_probability <- exp(-internal$expected)
+
+
 
 
 
