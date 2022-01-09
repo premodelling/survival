@@ -10,7 +10,7 @@
 source(file = 'R/functions/StudyData.R')
 source(file = 'R/functions/TemporalSplit.R')
 source(file = 'R/modelling/ImputationStep.R')
-source(file = 'R/modelling/Training.R')
+source(file = 'R/modelling/ModelCOXPH.R')
 
 
 #' The data set
@@ -42,32 +42,23 @@ variables <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 're
                'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
                'outcome', 'time_to_outcome')
 
+
 # exclude these variables during the testing phase
 dependent <- c('outcome', 'time_to_outcome')
 
 
 # training
-training_ <- ImputationStep(initial = training[, variables], phase = 'training', upload = TRUE)
-
-kaplan_meier <- survfit(formula = Surv(time = training_$time_to_outcome, event = training_$deceased) ~ 1,
-                        data = training_)
-ggsurvplot(fit = kaplan_meier, data = training_, pval = TRUE, conf.int = TRUE)
-
-
-models <- Training(training_ = training_, upload = TRUE)
-unboosted <- models$unboosted
-boosted <- models$boosted
-rm(models)
-
-summary(object = unboosted)
-ggforest(model = unboosted, data = training_)
-
-summary(object = boosted)
-plot(mboost::survFit(boosted), frame.plot = FALSE)
-
-
+training_ <- ImputationStep(initial = training[, variables],
+                            phase = 'training', upload = TRUE)
+unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
 # testing
+testing_ <- ImputationStep(initial = testing[, variables[!(variables %in% dependent)]],
+                           phase = 'testing', upload = TRUE)
+
+preliminary <- testing[complete.cases(testing), ]
+estimates <- predict(object = unboosted, newdata = preliminary, type = 'expected')
+
 
 
 
