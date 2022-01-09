@@ -29,11 +29,6 @@ because the baseline numbers that the discharges are relative to are unknown.
 * C Indices
 * Calibration plots
 
-<br>
-
-**Age Group, Sex, & Co-morbidities**
-
-
 
 <br>
 <br>
@@ -145,6 +140,18 @@ Read "Writing R Extensions" for more information.
 
 <br>
 <br>
+
+**CoxBoost**
+
+```r
+
+# https://cran.r-project.org/web/packages/devtools/index.html
+# https://cran.r-project.org/bin/windows/Rtools/rtools40.html
+# https://github.com/binderh/CoxBoost
+
+library(devtools)
+install_github(repo = 'binderh/CoxBoost')
+```
 
 <br>
 <br>
