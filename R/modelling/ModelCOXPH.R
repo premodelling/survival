@@ -30,8 +30,7 @@ ModelCOXPH <- function (training_, upload = TRUE) {
     }
 
     # modelling
-    initial <- coxph(formula = formula , data = training_, model = TRUE)
-    unboosted <- step(object = initial)
+    unboosted <- coxph(formula = formula , data = training_, model = TRUE, x = TRUE, y = TRUE)
     save(unboosted, file = file.path(pathstr, 'unboosted'), ascii = TRUE, compress = TRUE, compression_level = 7)
 
   }
