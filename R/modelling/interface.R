@@ -52,21 +52,7 @@ training_ <- ImputationStep(initial = training[, variables],
                             phase = 'training', upload = TRUE)
 unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
-# testing
-evaluating_ <- testing[complete.cases(testing), ]
-testing_ <- ImputationStep(initial = testing[, variables],
-                           phase = 'testing', upload = FALSE)
-
-
-
-
-# Play
-internal <- predict(object = unboosted, type = 'expected')
-internal <- data.frame(expected = internal)
-internal$lp <- predict(object = unboosted, type = 'lp')
-internal$risk_score <- predict(object = unboosted, type = 'risk')
-internal <- cbind(internal, as.data.frame(predict(object = unboosted, type = 'terms')))
-internal$survival_probability <- exp(-internal$expected)
+# The Cox model inappropriate, consider univariate analysis for relevant covariates
 
 
 
