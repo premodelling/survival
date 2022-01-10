@@ -26,9 +26,6 @@ training <- dataframes$training
 testing <- dataframes$testing
 
 
-
-
-
 #' Imputation
 #'
 #'
@@ -42,17 +39,32 @@ variables <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 're
                'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
                'outcome', 'time_to_outcome')
 
-
 # exclude these variables during the testing phase
 dependent <- c('outcome', 'time_to_outcome')
 
-
-# training
+# for training
 training_ <- ImputationStep(initial = training[, variables],
                             phase = 'training', upload = TRUE)
+
+# for testing
+testing_ <- ImputationStep(initial = testing[, variables],
+                           phase = 'testing', upload = TRUE)
+
+
+#' Training
+#'
+#' The Cox model is inappropriate, however consider including univariate analysis for appropriate covariates
+#'
+#' For time depedent cases
+#' https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Time-dependent_covariate
+#' https://glmnet.stanford.edu/articles/Coxnet.html#cox-models-for-start-stop-data-1
+#' https://www.rdocumentation.org/packages/glmnet/versions/4.1-3/topics/glmnet
+#' https://www.rdocumentation.org/packages/survival/versions/3.2-13/topics/Surv
+#'
+#'
 unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
-# The Cox model inappropriate, consider univariate analysis for relevant covariates
+#
 
 
 
