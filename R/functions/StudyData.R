@@ -4,6 +4,7 @@
 # Created on: 30/12/2021
 
 source(file = 'R/functions/FrequenciesTable.R')
+source(file = 'R/functions/StudyStart.R')
 
 StudyData <- function () {
 
@@ -79,13 +80,17 @@ StudyData <- function () {
   data$time_to_outcome <- as.integer(data$outcome_date - data$admission_date)
 
   # implausible observations
-  condition <- (data$time_to_outcome < 0 & !is.na(data$time_to_outcome))
+  condition <- (data$time_to_outcome < 1 & !is.na(data$time_to_outcome))
   implausible <- data[condition,]
   plausible <- data[!condition,]
 
-
   # message
   print(paste('There are ', nrow(implausible), ' implausible observations; omitted.'))
+
+  # extra time variables
+  initial <- StudyStart()
+  plausible$start <- as.integer(plausible$admission_date - initial)
+  plausible$stop <- as.integer(plausible$outcome_date - initial)
 
 
   return(plausible)
