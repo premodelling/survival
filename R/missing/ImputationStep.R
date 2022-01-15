@@ -6,7 +6,7 @@
 
 source(file = 'R/missing/Imputation.R')
 source(file = 'R/missing/ImputationProcessing.R')
-
+source(file = 'R/functions/StudyStart.R')
 
 
 #' ImputationStep
@@ -15,6 +15,8 @@ source(file = 'R/missing/ImputationProcessing.R')
 #' @param phase: training or testing
 #'
 ImputationStep <- function (initial, phase, upload = TRUE) {
+
+
 
 
   # ascertain phase value
@@ -67,6 +69,11 @@ ImputationStep <- function (initial, phase, upload = TRUE) {
     # the censor & deceased fields
     processed$censored <- dplyr::if_else(processed$outcome == 'Death', true = 0, false = 1)
     processed$deceased <- dplyr::if_else(processed$outcome == 'Death', true = 1, false = 0)
+
+    # study start point
+    tau <- StudyStart()
+    processed$start <- as.integer(processed$admission_date - tau)
+    processed$stop <- as.integer(processed$outcome_date - tau)
   }
 
 
