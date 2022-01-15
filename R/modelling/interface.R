@@ -9,8 +9,11 @@
 #'
 source(file = 'R/functions/StudyData.R')
 source(file = 'R/functions/TemporalSplit.R')
-source(file = 'R/modelling/ImputationStep.R')
+source(file = 'R/missing/ImputationStep.R')
 source(file = 'R/modelling/ModelCOXPH.R')
+
+source(file = 'R/evaluation/AssumptionViolationsCox.R')
+source(file = 'R/evaluation/SurivalCurve.R')
 
 
 #' The data set
@@ -64,8 +67,10 @@ testing_ <- ImputationStep(initial = testing[, variables],
 #'
 unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
-#
-
+SurvivalCurve(data = training_)
+ViolationsKaplan(data = training_)
+ViolationsTime(model = unboosted)
+ViolationsProportionalityTable(model = unboosted)
 
 
 
