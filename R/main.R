@@ -8,6 +8,7 @@
 #' Programs
 #'
 source(file = 'R/functions/StudyData.R')
+source(file = 'R/demographics/Is.R')
 
 
 
@@ -15,3 +16,11 @@ source(file = 'R/functions/StudyData.R')
 #'
 data <- StudyData()
 str(data)
+
+
+#' Is()
+#'
+#' Is the study's population demographics representative
+#' of England's population demographics
+#'
+Is()
