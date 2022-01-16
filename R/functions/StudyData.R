@@ -66,11 +66,9 @@ StudyData <- function () {
   # right censored: 1, 0
   # outcome: alive, deceased
   data$censored <- dplyr::if_else(data$outcome == 'Death', true = 0, false = 1)
-  data$censored <- factor(x = data$censored, levels = c(1, 0), exclude = NULL)
   table(data$outcome, data$censored)
 
   data$deceased <- dplyr::if_else(data$outcome == 'Death', true = 1, false = 0)
-  data$deceased <- factor(x = data$deceased, levels = c(0, 1), exclude = NULL)
   table(data$outcome, data$deceased)
 
   # outcome date
