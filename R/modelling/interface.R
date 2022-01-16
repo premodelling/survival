@@ -4,61 +4,30 @@
 # Created on: 06/01/2022
 
 
-
 #' Programs
 #'
-source(file = 'R/functions/StudyData.R')
-source(file = 'R/functions/TemporalSplit.R')
-source(file = 'R/missing/ImputationStep.R')
+source(file = 'R/functions/ImputedData.R')
 source(file = 'R/modelling/ModelCOXPH.R')
-
 source(file = 'R/evaluation/AssumptionViolationsCox.R')
-source(file = 'R/evaluation/SurivalCurve.R')
+source(file = 'R/evaluation/SurvivalCurve.R')
 
 
-#' The data set
+#' Data
 #'
-data <- StudyData()
-str(data)
-
-
-#' Splitting
+#' Upload the study data, excluding implausible observations, and
+#' its imputed form
 #'
-dataframes <- TemporalSplit(data = data)
-training <- dataframes$training
-testing <- dataframes$testing
-
-
-#' Imputation
-#'
-#'
-#' ...  re-calculate: censored & outcome_date, and add deceased
-#' ...  the imputation variables exclude: outcome_date (date can't be used
-#'      in the MICE models, time_to _outcome in lieu), censored (it is a project
-#'      variable created for analysis & graphing purposes)
-
-# all variables for training phase
-variables <- c('admission_date', 'age_group', 'sex', 'asthma', 'liver_mild', 'renal',
-               'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm',
-               'outcome', 'time_to_outcome')
-
-# exclude these variables during the testing phase
-dependent <- c('outcome', 'time_to_outcome')
-
-# for training
-training_ <- ImputationStep(initial = training[, variables],
-                            phase = 'training', upload = TRUE)
-
-# for testing
-testing_ <- ImputationStep(initial = testing[, variables],
-                           phase = 'testing', upload = TRUE)
+dataframes <- ImputedData(upload = TRUE)
+data <- dataframes$data
+training_ <- dataframes$training_
+testing_ <- dataframes$testing_
 
 
 #' Training
 #'
-#' The Cox model is inappropriate, however consider including univariate analysis for appropriate covariates
+#' The Cox model is inappropriate, proportionality assumption does not hold.
 #'
-#' For time depedent cases
+#' For time depedent cases:
 #' https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Time-dependent_covariate
 #' https://glmnet.stanford.edu/articles/Coxnet.html#cox-models-for-start-stop-data-1
 #' https://www.rdocumentation.org/packages/glmnet/versions/4.1-3/topics/glmnet
@@ -67,7 +36,7 @@ testing_ <- ImputationStep(initial = testing[, variables],
 #'
 unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
 
-SurvivalCurve(data = training_)
+SurvivalCurve(data = training_, caption = 'Training Data (multiply imputed)')
 ViolationsKaplan(data = training_)
 ViolationsTime(model = unboosted)
 ViolationsProportionalityTable(model = unboosted)
