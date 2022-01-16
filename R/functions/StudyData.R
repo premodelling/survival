@@ -72,22 +72,17 @@ StudyData <- function () {
   table(data$outcome, data$deceased)
 
   # outcome date
+  # anyNA(data$outcome_date)
   data$outcome_date <- as.Date(data$outcome_date)
-  if (anyNA(data$outcome_date)) {
-    missing <- sum(is.na(data$outcome_date))
-    print(paste0('There are missing outcome dates: ', missing, ' missing'))
-  }
+
 
   # time_to_event
   data$time_to_outcome <- as.integer(data$outcome_date - data$admission_date)
 
   # implausible observations
   condition <- (data$time_to_outcome < 1 & !is.na(data$time_to_outcome))
-  implausible <- data[condition,]
   plausible <- data[!condition,]
 
-  # message
-  print(paste('There are ', nrow(implausible), ' implausible observations; omitted.'))
 
   # extra time variables
   initial <- StudyStart()
