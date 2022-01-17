@@ -7,7 +7,7 @@ source(file = 'R/functions/StudyData.R')
 source(file = 'R/functions/TemporalSplit.R')
 source(file = 'R/missing/ImputationStep.R')
 
-ImputedData <- function(upload = TRUE) {
+ExtensiveStudyData <- function(upload = TRUE) {
 
   # The data set
   data <- StudyData()
@@ -39,6 +39,9 @@ ImputedData <- function(upload = TRUE) {
   testing_ <- ImputationStep(initial = testing[, variables],
                              phase = 'testing', upload = upload)
 
-  return(list(data = data, training_ = training_, testing_ = testing_))
+  data_ <- ImputationStep(initial = data[, variables],
+                          phase = 'data', upload = upload)
+
+  return(list(data = data, training_ = training_, testing_ = testing_, data_ = data_))
 
 }
