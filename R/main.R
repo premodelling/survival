@@ -8,6 +8,7 @@
 #' Programs
 #'
 source(file = 'R/functions/StudyData.R')
+source(file = 'R/functions/ExtensiveStudyData.R')
 source(file = 'R/demographics/Is.R')
 
 
@@ -16,6 +17,11 @@ source(file = 'R/demographics/Is.R')
 #'
 data <- StudyData()
 str(data)
+
+dataframes <- ExtensiveStudyData(upload = TRUE)
+training_ <- dataframes$training_
+testing_ <- dataframes$testing_
+data_ <- dataframes$data_
 
 
 #' Is()
