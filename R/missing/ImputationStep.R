@@ -20,7 +20,7 @@ ImputationStep <- function (initial, phase, upload = TRUE) {
 
 
   # ascertain phase value
-  if (!(phase %in% c('training', 'testing'))) {
+  if (!(phase %in% c('training', 'testing', 'data'))) {
     stop("The phase parameter must be a string equal to 'training' or 'testing'")
   }
 
@@ -56,7 +56,7 @@ ImputationStep <- function (initial, phase, upload = TRUE) {
   
   
   # if training, or perhaps either training/testing
-  if (phase == 'training' | phase == 'testing') {
+  if (phase %in% c('training', 'testing', 'data')) {
     # outcome date
     processed$outcome_date <- processed$admission_date + processed$time_to_outcome
 
