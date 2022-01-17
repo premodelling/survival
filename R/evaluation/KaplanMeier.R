@@ -14,7 +14,7 @@ source(file = 'R/evaluation/SurvivalCurve.R')
 KaplanMeier <- function () {
 
   # Upload the study data, excluding implausible observations, and its imputed form
-  dataframes <- ImputedData(upload = TRUE)
+  dataframes <- ExtensiveStudyData(upload = TRUE)
   data <- dataframes$data
   training_ <- dataframes$training_
   testing_ <- dataframes$testing_
