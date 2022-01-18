@@ -1,9 +1,9 @@
-# Title     : DiseaseQuotients.R
+# Title     : DiseaseGraphQuotients.R
 # Objective : yes/no quotients of a disease by age group & sex
 # Created by: greyhypotheses
 # Created on: 04/01/2022
 
-DiseaseQuotients <- function (field, original) {
+DiseaseGraphQuotients <- function (field, original) {
 
   excerpt <- original[, c('age_group', 'sex', field)]
 
