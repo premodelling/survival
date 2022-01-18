@@ -1,11 +1,6 @@
 ---
 title: Investigating factors that may influence COVID-19 survival
 author: 36112985
-abstract:
-  - "**Background:**"
-  - "**Objective:**  To Investigate, and identify, the factors that may influence patient survival of coronavirus disease 19."
-  - "**Methods**"
-  - "**Motivation:** You can also have some paragraphs start with bold face."
 bibliography: manuscript/bibliography.bib
 output:
   rmarkdown::pdf_document:
@@ -60,14 +55,37 @@ library(patchwork)
 ```{r}
 sys.source(file = 'R/evaluation/KaplanMeier.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/StudyData.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/background/Numbers.R', envir = knitr::knit_global())
 ```
 
+```{r}
+data <- StudyData()
+```
+
+> # ABSTRACT
+>
+> **Objective** *To investigate, amongst a set of probable prognostic factors, which factors may influence coronavirus 19 disease survival probabilities.*
+>
+> **Design** *Prospective cohort study; ongoing.*
+>
+> **Setting** *The International Severe Acute Respiratory and Emerging Infections Consortium (ISARIC) World Health Organization (WHO) Clinical Characterisation Protocol UK (CCP-UK) study, which enrols in-patients at at-least 260 England, Scotland, and Wales hospitals; the ISARIC Coronavirus Clinical Characterisation Consortium (ISARIC 4C) conducts the study. The investigation's patients are patients enrolled in a participating England hospital between 10 February 2020 and 5 July 2020.*
+>
+> **Participants** *Each study enrollee has a confirmed SARS-CoV-2 infection, or a high infection likelihood.  The investigation's patients are members of age groups *30 - 39*, *40 - 49*, and higher.*
+>
+> **Outcome** Patient survival.
+>
+> **Results** Inconclusive.
+>
+> **Conclusions**  Insufficient spectrum of factors.
 
 # Introduction
 
-During the past 2years, infections due to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) have led to a high number of coronavirus 19 disease deaths and in-hospital care.  With time, case fatality rates, and in-hospital survival rates, have improved [...] as our understanding of coronavirus 19 disease pathogenesis has developed, and hence prevention, mitigation, and treatment measures have improved.  Effective disease treatment measures depend on our understanding of the disease's prognosis factors [@riley2013], the focus of prognostic factors research.  Prognostic factor research *aims to identify factors associated with subsequent clinical outcome in people with a particular disease or health condition* [@riley2013].
+During the past 2 years, infections due to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) have led to a high number of coronavirus 19 disease deaths and in-hospital care.  With time, case fatality rates, and in-hospital survival rates, have improved [...] as our understanding of coronavirus 19 disease pathogenesis has developed.  Consequently,  disease prevention, mitigation, and treatment measures have improved.
 
-This brief investigates the prognostic factor potential of a set of measures associated with a prospective cohort study. The study's hypothesis is that *one or more of the measures has a significant impact on each patient's survival probability*.
+Effective disease treatment measures depend on our understanding of the disease's prognosis factors [@riley2013], the focus of prognostic factors research.  Prognostic factor research *aims to identify factors associated with subsequent clinical outcome in people with a particular disease or health condition* [@riley2013].
+
+This brief investigates the prognostic factor potential of a set of measures associated with a prospective cohort study. The study's hypothesis is that *one or more of the measures has a significant impact on each patient's survival probability*.  The ISARIC 4C study outcomes are: discharged alive, remains in hospital, death, transferred, and palliative discharge. Herein, the overarching outcomes of interest are: dead, alive.  The predictors, factors, under investigation
 
 # Methods
 
@@ -93,17 +111,25 @@ The ISARIC 4C study collects its baseline data via paper case report forms devel
 
 \vspace{20pt}
 
-## Outcomes
+## Exploratory Data Analysis
 
-The ISARIC 4C study outcomes are: discharged alive, remains in hospital, death, transferred, and palliative discharge. Herein, the overarching outcomes of interest are: dead, alive.
-
-\vspace{20pt}
-
-## Independent Variables
-
-The predictors, factors, under investigation
+* Relationships
+* Correlations
 
 \vspace{20pt}
+
+## Missing Data
+
+Most of the data's variables have missing values.  Prior to deciding how to address missing values, it is important to understand the missing values patterns [@steyerberg2010]. Rubin [@rubin1976, @steyerberg2010, @little2019] outlines three fundamental missing data mechanisms
+
+* missing completely at random (MCAR) / administrative errors, accidents
+* missing at random (MAR) / missing data associated with known patient characteristics [independent variables], or the outcome
+* missing not at random (MNAR) / missing data associated with missing values of the factor/predictor in question or with unobserved predictors
+
+If the missing values of a data set in question are *missing completely at random* then complete case analysis will suffice because the complete case excerpt is akin to a random sample from a complete population.  If MCAR does not hold, e.g., data is *missing at random*, then the complete case excerpt is not representative of the underlying population, therefore population inference is not possible via complete case analysis. [@steyerberg2010]
+
+Herein, missing data mechanisms analysis is via logistic regression.  Almost all the independent variables have missing values patterns that violate MCAR; addressed via multiple imputation in-line with the advice and protocols of [@sterne2009] & [@steyerberg2010].
+
 
 ## Factor Analysis
 
@@ -174,113 +200,59 @@ KaplanMeier()
 ```
 
 
+
+
+
+
+
+
+
+## Null Survival Curve
+
+* Complete Case
+* Imputation Case
+
+## Uni-variate & Multivariate Analysis
+
+* The table ... Cox
+
+## Adjusted Analysis via Restricted Mean Survival Time
+
+The proportional hazard assumption does not hold ...
+
+
+
+# Discussion
+
 ## The Cox Model Assumptions
 
 **The observations are independent**: This assumption requires a set of observations wherein the patients are not related or associated.  If there are clusters of relations or associates, the clusters should be, must be, indicated as-such.   By virtue of the > study's design, it is quite possible that the observations are not independent - families, friends, and colleagues living in the same area will probably be admitted to the same health centre.   Alas, the data set does not have cluster indicators, hence it is impossible to definitively test and state the independence, or otherwise, of the observations.
 
 **Independent Censoring**:  There is neither evidence to suggest nor rule-out <span style="color: brown;">outcomes due to systematic drop-outs, induced by study design flaws</span>.  What are the prognosis of patients released to palliative care or transferred?  Is the decision to transfer or release to palliative care influenced or dictated by *lower* survival probability?  If the answer to the latter question is yes - it will be in breach of independent censoring.
 
-> **Proportional Hazards**
->
-> *The curves.*
->
+**Proportional Hazards**: The curves.
 
+## Missing Data
 
-By default, citations are handled by `natbib` using a numeric citation format. To use name-date citations, sets `namedate: TRUE` in the YAML header.
+Within a missing values setting, there are 2 options w.r.t. predictor effect analysis [@steyerberg2010]
 
-Here are two sample references: 
+* complete case analysis for the uni-variate analysis, and complete case predictors & imputed confounding variables for adjusted analysis.
+* uni-variate and adjusted analysis after imputation of all missing values.
 
-* **author (year) example:** @horvath2018dna showed some really cool things. Only seems to work properly if `namedate: TRUE`. 
-* **(author year) example:** This is a well known result [@ji20123d]. 
+The investigation opted for the latter, especially because ...
 
-The bibliography will appear at the end of the document.
+## Bias
 
-Though not normally available in the OUP LaTeX format, [CSL style files](https://www.zotero.org/styles) can also be used with the Rmarkdown adaptation by setting in the YAML header `citation_package: "default"` and defining the `csl` element to be the path towards the style file.
+Possible bias points
 
-# Discussion
+* By virtue of the study's design pre-study--admission differences between hospitals is possible due to the ambiguity of the study's patient recruitment terms, and this might lead to post-study differences.  In a nutshell, the study is susceptible to selection bias. [Trochim]
 
-An equation without a label for cross-referencing:
+* Missing data [@sterne2009]
 
-$$
-E=mc^2
-$$
-
-An inline equation: $y=ax+b$
-
-An equation with a label for cross-referencing:
-
-\begin{equation}\label{eq:eq1}
-\int^{r_2}_0 F(r,\varphi){\rm d}r\,{\rm d}\varphi = 1
-\end{equation}
-
-This equation can be referenced as follows: Eq. \ref{eq:eq1}
 
 # Conclusion
 
-The code below creates a figure.
-
-```{r fig1, fig.cap="This is the first figure."}
-plot(1:10,main="Some data",xlab="Distance (cm)",
-     ylab="Time (hours)")
-```
-
-You can reference this figure as follows: Fig. \ref{fig:fig1}.
-
-
-
-Figures can span two columns be setting `fig.env="figure*"`.
-
-```{r fig2, fig.cap="This is a wide figure.", fig.env="figure*"}
-plot(1:5,pch=19,main="Some wide data",
-     xlab="Distance (cm)",ylab="Time (hours)")
-```
-
-Reference to second figure: Fig. \ref{fig:fig2}
-
-## Generate a table using `xtable`
-
-```{r xtabletable, results="asis", echo=TRUE}
-df <- data.frame(ID=1:3,code=letters[1:3])
-
-# Creates tables that follow OUP guidelines 
-# using xtable
-
-print(xtable::xtable(df,caption="This is a xtable table.", label="tab:tab1"), comment=FALSE,caption.placement="top")
-```
-
-You can reference this table as follows: Table \ref{tab:tab1}.
-
-## Generate a table using `kable`
-
-```{r kabletable, echo=TRUE}
-df <- data.frame(ID=1:3,code=letters[1:3])
-
-# kable can alse be used for creating tables
-knitr::kable(df,caption="This is a kable table.",
-             booktabs=TRUE,label="tab2")
-```
-
-You can reference this table as follows: Table \ref{tab:tab2}.
-
-## Table spanning two columns
-
-Tables can span two columns be setting `table.envir = "table*"` in `knitr::kable`.
-
-```{r widetable, echo=TRUE}
-df <- data.frame(ID=1:3,code1=letters[1:3],
-                code2=letters[4:6],
-                code3=letters[7:9],
-                code4=letters[10:12],
-                code5=letters[13:15])
-
-# kable can alse be used for creating tables
-knitr::kable(df,caption="This is a wide kable table.",
-             #format="latex",
-             table.envir="table*",
-             booktabs=TRUE,label="tab3")
-```
-
-
+The analysis of missing values hints at flaws in data collection.
 
 
 \appendix
@@ -289,6 +261,10 @@ knitr::kable(df,caption="This is a wide kable table.",
 
 \subsection{Exploratory Analysis}
 
+```{r}
+
+```
+
 Graphs
 
 \subsection{Missing Data}
@@ -296,6 +272,7 @@ Graphs
 Clusters, patterns, associations.
 
 
+<!--- # References {#references .unnumbered} --->
 # References
 
 
