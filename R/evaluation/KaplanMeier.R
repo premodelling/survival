@@ -16,23 +16,19 @@ KaplanMeier <- function () {
   # Upload the study data, excluding implausible observations, and its imputed form
   dataframes <- ExtensiveStudyData(upload = TRUE)
   data <- dataframes$data
-  training_ <- dataframes$training_
-  testing_ <- dataframes$testing_
+  data_ <- dataframes$data_
 
   # complete case
   complete <- data %>%
     dplyr::filter(!is.na(time_to_outcome) & !is.na(deceased))
-
-  # imputed
-  imputed <- dplyr::bind_rows(training_, testing_)
 
   # the survival curves
   left <- SurvivalCurve(
     data = complete,
     caption = str_glue('A. {nrow(complete)} records'))
   right <- SurvivalCurve(
-    data = imputed,
-    caption = str_glue('B. {nrow(imputed)} records'))
+    data = data_,
+    caption = str_glue('B. {nrow(data_)} records'))
 
   left + right
 
