@@ -1,10 +1,10 @@
-# Title     : DiseaseNumbers.R
+# Title     : DiseaseGraphNumbers.R
 # Objective : yes/no numbers of a disease by age group & sex
 # Created by: greyhypotheses
 # Created on: 04/01/2022
 
 
-DiseaseNumbers <- function (field, original) {
+DiseaseGraphNumbers <- function (field, original) {
 
   excerpt <- original[, c('age_group', 'sex', field)]
 
