@@ -57,6 +57,15 @@ data[, !(names(data) %in% 'outcome')]
 
 <br>
 
+```r
+estimates <- data.frame(lower = seq(30, 90, 10), upper = seq(39, 99, 10))
+estimates <- estimates %>%
+  mutate(m = rowMedians(as.matrix(estimates[, c("lower", "upper")])))
+```
+
+
+<br>
+
 **``ggplot2`` & subplots**
 
 Use ``library(patchwork)``; cf. ``facet_wrap()``.
