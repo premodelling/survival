@@ -7,7 +7,6 @@
 #' Programs
 #'
 source(file = 'R/functions/ExtensiveStudyData.R')
-source(file = 'R/modelling/ModelCOXPH.R')
 source(file = 'R/evaluation/AssumptionViolationsCox.R')
 source(file = 'R/evaluation/SurvivalCurve.R')
 
@@ -21,6 +20,20 @@ dataframes <- ExtensiveStudyData(upload = TRUE)
 data <- dataframes$data
 training_ <- dataframes$training_
 testing_ <- dataframes$testing_
+data_ <- dataframes$data_
+
+even <- data[complete.cases(data),]
+
+source(file = 'R/modelling/Univariate.R')
+analysis <- Univariate(blob = training_)
+analysis <- Univariate(blob = data_)
+analysis <- Univariate(blob = even)
+
+
+source(file = 'R/modelling/Multivariate.R')
+analysis <- Multivariate(blob = training_)
+analysis <- Multivariate(blob = data_)
+analysis <- Multivariate(blob = even)
 
 
 #' Training
@@ -34,7 +47,7 @@ testing_ <- dataframes$testing_
 #' https://www.rdocumentation.org/packages/survival/versions/3.2-13/topics/Surv
 #'
 #'
-unboosted <- ModelCOXPH(training_ = training_, upload = FALSE)
+
 
 SurvivalCurve(data = training_, caption = 'Training Data (multiply imputed)')
 ViolationsKaplan(data = training_)
