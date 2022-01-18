@@ -1,132 +1,190 @@
 ---
 title: Investigating factors that may influence COVID-19 survival
-author:
-  - name: 36112895
-    email: 36112895@lancaster.ac.uk
-    corresponding_author: TRUE
-    affiliation:
-      - A
-    footnote:
-      - 1
-address:
-  - code: A
-    department: Lancaster Medical School
-    organization: University of Lancaster
-footnote:
-  - code: 1
-    text: "Postgraduate Student"
+author: 36112985
 abstract:
+  - "**Background:**"
   - "**Objective:**  To Investigate, and identify, the factors that may influence patient survival of coronavirus disease 19."
-  - "More"
+  - "**Methods**"
   - "**Motivation:** You can also have some paragraphs start with bold face."
-keywords:
-  - mathematics
-  - survival
-  - prognostics
-
-bibliography: manuscript/bibliography.bib # Includes refs in OUP example template
-# When using `citation_package = "default"`, a CSL file can be used
-# csl: https://www.zotero.org/styles/oxford-university-press-note
+bibliography: manuscript/bibliography.bib
 output:
-  rticles::oup_article:
-    oup_version: 1 # 1 = 2020 CTAN OUP CLS package; 0 = 2009 OUP CLS package
+  rmarkdown::pdf_document:
     keep_tex: FALSE
-    #journal: "Journal Name"
-    document_style: "contemporary" # Can be contemporary, modern, traditional
-    papersize: "large" # Can be large, medium, small
-    #citation_package: "default" # Uncomment when using a CSL; default "natbib"
-    namedate: TRUE # Set FALSE to use numeric refs; Default FALSE
-    #number_sections: FALSE # Uncomment to not number sections; default TRUE
-    #number_lines: TRUE # Use `lineno` package - Default FALSE
-    #number_lines_options: ["mathlines","switch"]  # Options for latex lineno package.
-    #onecolumn: TRUE # Uncomment for one column format; default FALSE
+    citation_package: "default"
+    number_sections: FALSE
     extra_dependencies:
-      - booktabs # to use with knitr::kable() example below
-      
-# Example of pandoc's variable
-# urlcolor: orange
-# linkcolor: green
-# citecolor: red
+      - booktabs
+urlcolor: orange
+linkcolor: green
+citecolor: red
 header-includes:
-  - \theoremstyle{thmstyleone}
+  - \usepackage{color}
+  - \usepackage{caption}
+  - \captionsetup[figure]{font={normalsize, color=gray}, width=.8\linewidth}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \usepackage{fancyhdr}
   - \newtheorem{theorem}{Theorem}
   - \newtheorem{proposition}[theorem]{Proposition}
-  - \theoremstyle{thmstyletwo}
-  - \newtheorem{example}{Example}
   - \newtheorem{remark}{Remark}
-  - \theoremstyle{thmstylethree}
   - \newtheorem{definition}{Definition}
+  - \definecolor{darkgrey}{HTML}{4a4a4a}
+  - \titleformat*{\section}{\Large\color{darkgrey}}
+  - \pagestyle{fancy}
 ---
 
 <!--- Global Settings
     th -> top or here
 --->
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.pos = 'th',
-  out.width = '100%', dpi = 300, fig.env="figure")
-
-options(knitr.table.format = "latex") # For kable tables to write LaTeX table directly
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.table.format = "latex")
 ```
 
 <!--- imports --->
 ```{r include = FALSE}
 library(xtable)
+library(ggplot2)
 library(dplyr)
+library(tidyr)
+library(stringr)
+
+
 library(magrittr)
+library(latex2exp)
+library(survival)
+library(patchwork)
 ```
 
 <!--- external functios --->
 ```{r}
+sys.source(file = 'R/evaluation/KaplanMeier.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/StudyData.R', envir = knitr::knit_global())
 ```
 
 
 # Introduction
 
-This template is based on the generic OUP authoring template available on CTAN under [oup-authoring-template](https://www.ctan.org/pkg/oup-authoring-template). The CTAN template includes LaTeX documentation and a sample LaTeX document that provide far more details regarding the full functionality of the format. Here, only the basic functioning of the Rmarkdown adaptation of the format is demonstrated.
+During the past 2years, infections due to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) have led to a high number of coronavirus 19 disease deaths and in-hospital care.  With time, case fatality rates, and in-hospital survival rates, have improved [...] as our understanding of coronavirus 19 disease pathogenesis has developed, and hence prevention, mitigation, and treatment measures have improved.  Effective disease treatment measures depend on our understanding of the disease's prognosis factors [@riley2013], the focus of prognostic factors research.  Prognostic factor research *aims to identify factors associated with subsequent clinical outcome in people with a particular disease or health condition* [@riley2013].
 
-## A subsection
-
-A numbered list:
-
-1) First point
-2) Second point
-    - Subpoint
-    
-A bullet list:
-
-* First point
-* Second point
-
-## Notes
-
-* Extra white space in document will tend to disappear as text is filled in.
-* Code blocks tend to generate lots of empty white space when `echo=TRUE` for some reason.
-
-
+This brief investigates the prognostic factor potential of a set of measures associated with a prospective cohort study. The study's hypothesis is that *one or more of the measures has a significant impact on each patient's survival probability*.
 
 # Methods
 
-## Data Source
-The data is a derivative of the ... It is a cohort study wherein ...
+## Study design and setting
+
+This investigation's data is an indirect ISARIC (International Severe Acute Respiratory Infection Consortium)  4C (Coronavirus Clinical Characterisation Consortium) study data set.  The study is an ongoing prospective cohort study based in more than 200 United Kingdom acute care hospitals.  This investigation's data is an England only data set.  The reporting ...
+
+\vspace{20pt}
 
 ## Participants
 
-* Study setting
-* Eligibility criteria
+Inclusion criteria were people of all ages who were admitted to one of 208 acute care hospitals in England, Scotland, and Wales with proven or high likelihood of infection with a pathogen of public health interest, defined as SARS-CoV-2 for this event by Public Health England. Reverse transcriptase polymerase chain reaction was the only mode of testing available during the period of study. The decision to test was at the discretion of the clinician attending the patient, and not defined by protocol. The enrolment criterion “high likelihood of infection” reflects that a preparedness protocol cannot assume that a diagnostic test will be available for an emergent pathogen. Site training emphasises that only patients who tested positive for covid-19 were eligible for enrolment.
 
-## Outcome
+National guidance was provided by Public Health England and other UK public health agencies that advised who to test based on clinical case definitions for possible covid-19. We also included patients who had been admitted for a separate condition but had tested positive for covid-19 during their hospital stay. Patients were only enrolled during their index admission. Patients had clinical information from their routine health records uploaded into the case report form. Consent was not required for collection of depersonalised routine healthcare data for research in England and Wales. A waiver for consent was given by the Public Benefit and Privacy Panel in Scotland.
 
-* Died
+\vspace{20pt}
 
-## Predictors
+## Data
+
+Although the consortium collects a large variety of demographic, clinical, and outcome data, this investigation's data only included a limited subset of the study's variables.  The demographic data variables are sex and age group, the comorbidity variables are asthma (physician diagnosed), mild liver disease, moderate/severe liver disease, renal disease, chronic pulmonary disease (excluding asthma), chronic neurological disorder, malignant neoplasm.
+
+The ISARIC 4C study collects its baseline data via paper case report forms developed by ISARIC, and the WHO (World Health Organization), for outbreak investigations.  Additionally, the data brief states that the baseline data records are *uploaded [on] admission, and usually before hospital episodes were complete, to a REDCap database (Research Electronic Data Capture, Vanderbilt University, US, hosted by University of Oxford, UK).*
+
+\vspace{20pt}
+
+## Outcomes
+
+The ISARIC 4C study outcomes are: discharged alive, remains in hospital, death, transferred, and palliative discharge. Herein, the overarching outcomes of interest are: dead, alive.
+
+\vspace{20pt}
+
+## Independent Variables
+
+The predictors, factors, under investigation
+
+\vspace{20pt}
+
+## Factor Analysis
+
+The Cox Hazard, Restricted Mean Survival
+
+\vspace{20pt}
 
 
+# Results
+
+## Characteristics
+
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{l r r r}
+    & & & \\
+    \textbf{In Hospital Mortality} & & & \\
+    \hline
+     & \textbf{no} & \textbf{yes} & \textbf{NA} \\
+    deceased & 31724 & 14049 & 347 \\
+     & 0.688 & 0.305 & 0.008 \\
+     & & & \\
+    \textbf{Comorbidities} & & & \\
+    \hline
+     & \textbf{no} & \textbf{yes} & \textbf{NA} \\
+    asthma & 37376 & 5872 & 2872 \\
+    & 0.81 & 0.13 & 0.06 \\
+    mild liver disease & 42021 & 666 & 3433 \\
+     & 0.91 & 0.01 & 0.07 \\
+    renal disease & 35158 & 8056 & 2906 \\
+     & 0.76 & 0.17 & 0.06 \\
+    pulmonary & 35265 & 8078 & 2777 \\
+     & 0.76 & 0.18 & 0.06 \\
+    neurological disorder & 37227 & 5806 & 3087 \\
+     & 0.81 & 0.13 & 0.07 \\
+    liver mod severe &  41901 &  902 & 3317 \\
+     & 0.91 & 0.02 & 0.07 \\
+    malignant neoplasm & 38164 & 4734 & 3222 \\
+     & 0.83 & 0.10 & 0.07 \\
+     & & & \\
+    \textbf{Demographics} & & & \\
+    \hline
+    \textbf{Age Group} &  \textbf{Male} & \textbf{Female} & \textbf{NA} \\
+    80-89 & 7067 & 6197 & 31 \\
+    & 0.153 & 0.134 & 0.001 \\
+    70-79 & 6388 & 4445 & 19 \\
+    & 0.139 & 0.096 & 0.000 \\
+    60-69 & 4321 & 2601 & 9 \\
+    & 0.094 & 0.056 & 0.000 \\
+    50-59 & 3463 & 2151 & 9 \\
+    & 0.075 & 0.047 & 0.000 \\
+    90+ & 2085 & 2816 & 13 \\
+    & 0.045 & 0.061 & 0.000 \\
+    40-49 & 1846 & 1110 & 5 \\
+    & 0.040 & 0.024 & 0.000 \\
+    30-39 & 784 & 756 & 4 \\
+    & 0.017 & 0.016 & 0.000 \\
+    \hline
+    \end{tabular}
+\end{table}
 
 
+## The Null Kaplan-Meier Curves
+
+```{r fig.height = 3.5, fig.align = 'center', warning = FALSE, message = FALSE, fig.cap = "The null survival curves, whereby (A) is based on complete cases only, whilst (B) is based on all plausible records after multiple imputation."}
+KaplanMeier()
+```
 
 
-# Literature citations
+## The Cox Model Assumptions
+
+**The observations are independent**: This assumption requires a set of observations wherein the patients are not related or associated.  If there are clusters of relations or associates, the clusters should be, must be, indicated as-such.   By virtue of the > study's design, it is quite possible that the observations are not independent - families, friends, and colleagues living in the same area will probably be admitted to the same health centre.   Alas, the data set does not have cluster indicators, hence it is impossible to definitively test and state the independence, or otherwise, of the observations.
+
+**Independent Censoring**:  There is neither evidence to suggest nor rule-out <span style="color: brown;">outcomes due to systematic drop-outs, induced by study design flaws</span>.  What are the prognosis of patients released to palliative care or transferred?  Is the decision to transfer or release to palliative care influenced or dictated by *lower* survival probability?  If the answer to the latter question is yes - it will be in breach of independent censoring.
+
+> **Proportional Hazards**
+>
+> *The curves.*
+>
+
 
 By default, citations are handled by `natbib` using a numeric citation format. To use name-date citations, sets `namedate: TRUE` in the YAML header.
 
@@ -139,7 +197,7 @@ The bibliography will appear at the end of the document.
 
 Though not normally available in the OUP LaTeX format, [CSL style files](https://www.zotero.org/styles) can also be used with the Rmarkdown adaptation by setting in the YAML header `citation_package: "default"` and defining the `csl` element to be the path towards the style file.
 
-# Equations
+# Discussion
 
 An equation without a label for cross-referencing:
 
@@ -157,7 +215,7 @@ An equation with a label for cross-referencing:
 
 This equation can be referenced as follows: Eq. \ref{eq:eq1}
 
-# Inserting R figures
+# Conclusion
 
 The code below creates a figure.
 
@@ -168,7 +226,7 @@ plot(1:10,main="Some data",xlab="Distance (cm)",
 
 You can reference this figure as follows: Fig. \ref{fig:fig1}.
 
-## Figures spanning two-columns
+
 
 Figures can span two columns be setting `fig.env="figure*"`.
 
@@ -178,8 +236,6 @@ plot(1:5,pch=19,main="Some wide data",
 ```
 
 Reference to second figure: Fig. \ref{fig:fig2}
-
-# Tables
 
 ## Generate a table using `xtable`
 
@@ -227,25 +283,19 @@ knitr::kable(df,caption="This is a wide kable table.",
 
 
 
-# Cross-referencing sections
+\appendix
 
-You can cross-reference sections and subsections as follows: Section \ref{literature-citations} and Section \ref{a-subsection}.
+\section{Appendices}
 
-***Note:*** the last section in the document will be used as the section title for the bibliography.
+\subsection{Exploratory Analysis}
 
-For more portable and flexible referencing of sections, equations, figures and tables, use [`bookdown::pdf_document2`](https://github.com/rstudio/bookdown) with YAML header option `base_format: rticles::oup_article`.
+Graphs
 
-# Appendices {-}
+\subsection{Missing Data}
 
-::: {.appendices latex=true}
+Clusters, patterns, associations.
 
-# Section title of first appendix
-
-blabla
-
-## Subsection title of first appendix
-
-and so on....
-:::
 
 # References
+
+
