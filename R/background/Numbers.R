@@ -3,7 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 16/01/2022
 
-source(file = 'R/functions/StudyData.R')
+source(file = '../functions/StudyData.R')
 
 Characteristics <- function () {
 
