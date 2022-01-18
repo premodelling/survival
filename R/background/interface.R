@@ -8,8 +8,8 @@
 source(file = 'R/functions/StudyData.R')
 
 source(file = 'R/background/AgeGroupSexEvent.R')
-source(file = 'R/background/DiseaseNumbers.R')
-source(file = 'R/background/DiseaseQuotients.R')
+source(file = 'R/background/DiseaseGraphNumbers.R')
+source(file = 'R/background/DiseaseGraphQuotients.R')
 source(file = 'R/background/CorrelationOfPredictors.R')
 
 source(file = 'R/background/QuotientsDistributions.R')
@@ -35,12 +35,12 @@ AgeGroupSexEvent(original = data)
 #' ... Although the absolute numbers differ between the sexes, the pattern of
 #'     sufferers-by-age-group is similar between the sexes.
 #'
-DiseaseNumbers(field = 'pulmonary', original = data)
+DiseaseGraphNumbers(field = 'pulmonary', original = data)
 
 
 #' Illustration: Per comorbidity, the yes/no ...
 #'
-DiseaseQuotients(field = 'pulmonary', original = data)
+DiseaseGraphQuotients(field = 'pulmonary', original = data)
 
 
 #' Correlation
