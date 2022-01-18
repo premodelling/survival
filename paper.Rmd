@@ -1,0 +1,99 @@
+---
+title: Investigating factors that may influence COVID-19 survival
+author:
+  - name: 36112985
+    email: 36112985@lancaster.ac.uk
+    affiliation: Lancaster Medical School
+    corresponding: 36112985@lancaster.ac.uk
+    affiliation: 
+      - Lancaster Medical School
+address:
+  - code: Lancaster Medical School
+    address: Lancaster Medical School, Faculty of Health & Medicine, University of Lancaster
+abstract: |
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget porta erat. Morbi consectetur est vel gravida pretium. Suspendisse ut dui eu ante cursus gravida non sed sem. Nullam sapien tellus, commodo id velit id, eleifend volutpat quam. Phasellus mauris velit, dapibus finibus elementum vel, pulvinar non tellus. Nunc pellentesque pretium diam, quis maximus dolor faucibus id. Nunc convallis sodales ante, ut ullamcorper est egestas vitae. Nam sit amet enim ultrices, ultrices elit pulvinar, volutpat risus.
+  
+author_summary: |
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget porta erat. Morbi consectetur est vel gravida pretium. Suspendisse ut dui eu ante cursus gravida non sed sem. Nullam sapien tellus, commodo id velit id, eleifend volutpat quam. Phasellus mauris velit, dapibus finibus elementum vel, pulvinar non tellus. Nunc pellentesque pretium diam, quis maximus dolor faucibus id. Nunc convallis sodales ante, ut ullamcorper est egestas vitae. Nam sit amet enim ultrices, ultrices elit pulvinar, volutpat risus.
+
+bibliography: paper/mybibfile.bib
+output:
+  rticles::plos_article:
+    keep_tex: FALSE
+# plos.csl can be download and used locally
+csl: http://www.zotero.org/styles/plos
+---
+
+_Text based on plos sample manuscript, see <https://journals.plos.org/ploscompbiol/s/latex>_
+
+# Introduction
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget porta erat. Morbi consectetur est vel gravida pretium. Suspendisse ut dui eu ante cursus gravida non sed sem. Phasellus mauris velit, dapibus finibus elementum vel, pulvinar non tellus. Nunc pellentesque pretium diam, quis maximus dolor faucibus id. Nunc convallis sodales ante, ut ullamcorper est egestas vitae. Nam sit amet enim ultrices, ultrices elit pulvinar, volutpat risus.
+
+A list
+
+- Item 1
+- Item 2
+
+Here are two sample references: @Feynman1963118 [@Dirac1953888].
+
+# Methods
+
+## Exploratory Data Analysis
+
+* Relationships
+* Correlations
+
+## Missing Data
+
+Most of the data's variables have missing values.  Prior to deciding how to address missing values, it is important to understand the missing values patterns [@steyerberg2010]. Rubin [@rubin1976, @steyerberg2010, @little2019] outlines three fundamental missing data mechanisms
+
+* missing completely at random (MCAR) / administrative errors, accidents
+* missing at random (MAR) / missing data associated with known patient characteristics [independent variables], or the outcome
+* missing not at random (MNAR) / missing data associated with missing values of the factor/predictor in question or with unobserved predictors
+
+If the missing values of a data set in question are *missing completely at random* then complete case analysis will suffice because the complete case excerpt is akin to a random sample from a complete population.  If MCAR does not hold, e.g., data is *missing at random*, then the complete case excerpt is not representative of the underlying population, therefore population inference is not possible via complete case analysis. [@steyerberg2010]
+
+Herein, missing data mechanisms analysis is via logistic regression.  Almost all the independent variables have missing values patterns that violate MCAR; addressed via multiple imputation in-line with the advice and protocols of [@sterne2009] & [@steyerberg2010].
+
+
+## Null Survival Curve
+
+* Complete Case
+* Imputation Case
+
+## Uni-variate Analysis
+
+* The table ... Cox
+
+## Adjusted Analysis via Restricted Mean Survival Time
+
+The proportional hazard assumption does not hold ...
+
+
+
+# Results
+
+# Discussion
+
+Within a missing values setting, there are 2 options w.r.t. predictor effect analysis [@steyerberg2010]
+
+* complete case analysis for the uni-variate analysis, and complete case predictors & imputed confounding variables for adjusted analysis.
+* uni-variate and adjusted analysis after imputation of all missing values.
+
+The investigation opted for the latter, especially because ...
+
+## Bias
+
+Possible bias points
+
+* By virtue of the study's design pre-study--admission differences between hospitals is possible due to the ambiguity of the study's patient recruitment terms, and this might lead to post-study differences.  In a nutshell, the study is susceptible to selection bias. [Trochim]
+
+* Missing data [@sterne2009]
+
+
+# Conclusion
+
+The analysis of missing values hints at flaws in data collection.
+
+# References {#references .unnumbered}
