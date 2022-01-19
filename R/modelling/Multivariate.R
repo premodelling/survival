@@ -36,7 +36,7 @@ Multivariate <- function(blob) {
   frame[indices, 'proportionality'] <- evidence[row.names(evidence) == 'age_group',]
 
   # field names
-  names(frame) <- c('Factor', 'Coefficient', 'HR', 'HRLCI', 'HRUCI', 'p_value', 'proportionality')
+  names(frame) <- c('label', 'Coefficient', 'HR', 'HRLCI', 'HRUCI', 'p_value', 'proportionality')
 
   return(list(diagnostics = frame, model = model))
 
