@@ -1,5 +1,5 @@
 # Title     : UnivariateAnalysis.R
-# Objective : Analysis
+# Objective : Univariate Analysis
 # Created by: greyhypotheses
 # Created on: 19/01/2022
 
