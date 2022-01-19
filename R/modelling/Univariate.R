@@ -44,6 +44,9 @@ Univariate <- function (blob) {
   }  
   est <- lapply(X = models, FUN = function (model){estimates(model = model)})
   diagnostics <- dplyr::bind_rows(est)
+
+
+
   
   return(list(diagnostics = diagnostics, models = models))
 }
