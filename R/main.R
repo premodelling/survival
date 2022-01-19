@@ -24,6 +24,10 @@ rm(dataframes)
 str(data)
 
 
+#' Basic characteristics
+c(starting = min(data$admission_date), ending = max(data$admission_date))
+table(data$age_group)
+
 
 #' Is()
 #'
