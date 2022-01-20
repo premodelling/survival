@@ -1,0 +1,89 @@
+# Title     : RMST.R
+# Objective : Restricted Mean Survival Time
+# Created by: greyhypotheses
+# Created on: 19/01/2022
+
+
+source(file = 'R/functions/ExtensiveStudyData.R')
+source(file = 'R/restricted/AgeGroupMedians.R')
+source(file = 'R/restricted/Unadjusted.R')
+source(file = 'R/restricted/Adjusted.R')
+
+
+RMST <- function () {
+
+
+  # data
+  dataframes <- ExtensiveStudyData(upload = TRUE)
+  data_ <- dataframes$data_
+
+
+  # for univariate RMST
+  keys <- c('female', 'asthma', 'liver_mild', 'renal', 'pulmonary',
+            'neurological', 'liver_mod_severe', 'malignant_neoplasm')
+
+
+  # focus on
+  excerpt <- data_
+
+
+  # the binary fields must be converted to numeric fields
+  binary <- c('asthma', 'liver_mild', 'renal', 'pulmonary', 'neurological', 'liver_mod_severe', 'malignant_neoplasm')
+  for (name in binary) {
+    excerpt[, name] <- dplyr::if_else(excerpt[, name] == 'yes', true = 1, false = 0, missing = NULL)
+  }
+
+
+  # sex
+  excerpt$female <- dplyr::if_else(excerpt$sex == 'Female', true = 1, false = 0, missing = NULL)
+
+
+  # age group median
+  excerpt <- AgeGroupMedians(blob = excerpt)
+
+
+  # the time & status
+  time <- excerpt$time_to_outcome
+  status <- excerpt$deceased
+
+
+  # global tau
+  times <- function(key) {
+    value <- min(max(excerpt[excerpt[, key] == 1, 'time_to_outcome']),
+                 max(excerpt[excerpt[, key] == 0, 'time_to_outcome']))
+    return(value)
+  }
+  minima <- as.numeric(lapply(X = keys, FUN = function (x){times(x)}))
+  tau <- min(minima)
+
+
+  # unadjusted
+  undaj <- Unadjusted(excerpt = excerpt, time = time, status = status, tau = tau, keys = keys)
+
+
+  # adjusted
+  adj <- Adjusted(excerpt = excerpt, time = time, status = status, tau = tau, keys = keys)
+
+
+  # diagnostics
+  diagnostics <- merge(x = undaj, y = adj, by = 0, all.x = TRUE)
+  names(diagnostics)[names(diagnostics) == 'Row.names'] <- 'label'
+
+
+  # labels
+  settings <- data.frame(label = c('female', 'asthma', 'liver_mild', 'renal', 'pulmonary',
+                                   'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
+                         name = c('Female', 'Asthma',
+                                  'Liver Disease (Mild)', 'Renal Disease', 'Pulmonary Disease',
+                                  'Neurological Disorder', 'Liver Disease (Moderate, Severe)', 'Malignant Neoplasm Y'))
+
+
+  # restricted mean survival calculations
+  diagnostics <- dplyr::left_join(x = diagnostics, y = settings, by = 'label')
+  diagnostics <- diagnostics %>%
+    select(name, est, lower, upper, p, est_, lower_, upper_, p_)
+
+  return(diagnostics)
+
+
+}
