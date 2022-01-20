@@ -8,6 +8,7 @@
 #' Programs
 #'
 source(file = 'R/functions/ExtensiveStudyData.R')
+source(file = 'R/background/Numbers.R')
 source(file = 'R/demographics/Is.R')
 
 
@@ -35,3 +36,5 @@ table(data$age_group)
 #' of England's population demographics
 #'
 Is()
+
+
