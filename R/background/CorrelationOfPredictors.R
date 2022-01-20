@@ -20,15 +20,16 @@ CorrelationOfPredictors <- function (predictors, data) {
   design <- mapply(FUN = IsCorrelatedCC, reference = predictors, MoreArgs = list(variables = predictors, frame = data))
   measures <- dplyr::bind_rows(design)
 
-  # matrix graph
+  # matrix graph, colors = c('#E46726', 'white', 'black'),
   ggcorrplot::ggcorrplot(corr = measures,
                          type = 'upper',
                          ggtheme = ggplot2::theme_minimal(),
-                         colors = c('#E46726', 'white', 'black'),
                          outline.color = 'white',
                          lab = TRUE,
                          lab_size = 3,
                          lab_col = 'grey',
-                         digits = 2)
+                         digits = 2) +
+    scale_fill_gradient2(breaks = c(0, 1), limit = c(0, 1)) +
+    labs(fill = "Cramer's V\n")
 
 }
