@@ -75,7 +75,7 @@ RMST <- function () {
                                    'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
                          name = c('Female', 'Asthma',
                                   'Liver Disease (Mild)', 'Renal Disease', 'Pulmonary Disease',
-                                  'Neurological Disorder', 'Liver Disease (Moderate, Severe)', 'Malignant Neoplasm Y'))
+                                  'Neurological Disorder', 'Liver Disease (Moderate, Severe)', 'Malignant Neoplasm'))
 
 
   # restricted mean survival calculations
