@@ -1,0 +1,452 @@
+---
+title: Investigating factors that may influence COVID-19 survival
+author: 36112985
+bibliography: manuscript/bibliography.bib
+output:
+  rmarkdown::pdf_document:
+    keep_tex: FALSE
+    citation_package: "default"
+    number_sections: FALSE
+    extra_dependencies:
+      - booktabs
+urlcolor: orange
+linkcolor: green
+citecolor: red
+header-includes:
+  - \usepackage{color}
+  - \usepackage{caption}
+  - \usepackage{booktabs}
+  - \captionsetup[figure]{font={normalsize, color=gray}, width=.8\linewidth}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \usepackage{fancyhdr}
+  - \newtheorem{theorem}{Theorem}
+  - \newtheorem{proposition}[theorem]{Proposition}
+  - \newtheorem{remark}{Remark}
+  - \newtheorem{definition}{Definition}
+  - \definecolor{darkgrey}{HTML}{4a4a4a}
+  - \titleformat*{\section}{\Large\color{darkgrey}}
+  - \pagestyle{fancy}
+---
+
+<!--- Global Settings
+    th -> top or here
+--->
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.table.format = 'latex')
+options(knitr.kable.NA = '')
+```
+
+<!--- imports --->
+```{r include = FALSE}
+library(xtable)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(matrixStats)
+
+
+library(magrittr)
+library(latex2exp)
+library(survival)
+library(survRM2)
+library(patchwork)
+library(kableExtra)
+```
+
+<!--- external functios --->
+```{r}
+sys.source(file = 'R/functions/ExtensiveStudyData.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/background/Numbers.R', envir = knitr::knit_global())
+sys.source(file = 'R/background/CorrelationOfPredictors.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/missing/Pattern.R', envir = knitr::knit_global())
+sys.source(file = 'R/missing/Test.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/demographics/Is.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/modelling/UnivariateAnalysis.R', envir = knitr::knit_global())
+sys.source(file = 'R/modelling/MultivariateAnalysis.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/evaluation/KaplanMeier.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/restricted/RMST.R', envir = knitr::knit_global())
+```
+
+```{r}
+dataframes <- ExtensiveStudyData(upload = TRUE)
+data <- dataframes$data
+training_ <- dataframes$training_
+data_ <- dataframes$data_
+```
+
+> # ABSTRACT
+>
+> **Objective** *To investigate, amongst a set of probable prognostic factors, which factors may influence coronavirus 19 disease survival probabilities.*
+>
+> **Design & Setting** *The underlying study is the International Severe Acute Respiratory and Emerging Infections Consortium (ISARIC) World Health Organization (WHO) Clinical Characterisation Protocol UK (CCP-UK) study, which enrols in-patients at at-least 260 England, Scotland, and Wales hospitals; the ISARIC Coronavirus Clinical Characterisation Consortium (ISARIC 4C) conducts the study.  It is an ongoing prospective cohort study. Herein, the patients are patients enrolled in a participating England hospital between 10 February 2020 and 5 July 2020.*
+>
+> **Results** The results of the investigation are inconclusive. Modelling and analysis could not proceed via the Cox Proportional Hazards model due to the violation of the proportionality assumption.  The restricted mean survival time analysis suggest that sex, malignant neoplasm, neurological disorder, pulmonary disease, and renal disease might have a significant impact on in-hospital coronavirus 19 disease survival.
+>
+> **Conclusions**  The investigation should be repeated with much more appropriate data, e.g., continuous age variables, start & stop times of events, follow-ups, etc.  The analysis of missing values hints at flaws in data collection, this might be partly addressed via a clearer recruitment protocol.
+
+\vspace{35pt}
+
+# INTRODUCTION
+
+During the past 2 years, infections due to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) have led to a high number of coronavirus 19 disease deaths and in-hospital care [@jhu2020, @ritchie2020].  With time, in-hospital survival rates, have improved [@docherty2021].  A number of factors underlie the improvements, one of the most crucial being a better understanding of coronavirus 19 disease, which has led to much more effective treatment measures [@docherty2021].
+
+Effective disease treatment measures partly depend on our understanding of the disease's prognosis factors [@riley2013], the focus of prognostic factors research.  Prognostic factor research *aims to identify factors associated with subsequent clinical outcome in people with a particular disease or health condition* [@riley2013].
+
+The definitive set of factors that affect in-hospital survival probabilities of coronavirus 19 disease patients is unknown, and is a research focus [@gorog2022, @mcgurnaghan2021]. This brief investigation investigates the prognostic factor potential of a set of measures associated with the ISARIC prospective cohort study. The hypothesis being *one or more of the measures has a significant impact on each patient's survival probability*.
+
+\vspace{35pt}
+
+# METHODS
+
+\vspace{10pt}
+
+## Study design and setting
+
+This investigation's data is an indirect ISARIC (International Severe Acute Respiratory Infection Consortium) 4C (Coronavirus Clinical Characterisation Consortium) study data set; the data set is a project assigned data set, not actively collected.  The ISARIC 4C study is an ongoing prospective cohort study that is conducted by the ISARIC Coronavirus Clinical Characterisation Consortium (ISARIC 4C).  The study enrols in-patients at at-least 260 England, Scotland, and Wales acute care hospitals.  Herein, the patients are patients enrolled in a participating England hospital between 10 February 2020 and 5 July 2020, i.e., this paper's investigation focuses on an England only data set.  Additionally, the England only data set consists of patients within age groups *30 - 39*, *40 - 49*, and higher.*
+
+According to the project brief, each study enrollee has a confirmed SARS-CoV-2 infection, or a high infection likelihood.  The study collects its baseline data via paper case report forms developed by ISARIC, and the WHO (World Health Organization), for outbreak investigations.
+
+Although the consortium collects a large variety of demographic, clinical, and outcome data, this investigation's data only included a limited subset of the study's variables.  The demographic data variables are sex and age group, the comorbidity variables are asthma (physician diagnosed), mild liver disease, moderate/severe liver disease, renal disease, chronic pulmonary disease (excluding asthma), chronic neurological disorder, malignant neoplasm.
+
+\vspace{20pt}
+
+## Outcomes
+
+The ISARIC 4C study outcomes are: discharged alive, remains in hospital, death, transferred, and palliative discharge. Herein, the overarching outcomes of interest are: dead, alive.  Hence, investigation's censoring logic is
+
+> Right Censored:
+>
+>  * discharged alive
+>
+>  * remains in hospital
+>
+>  * transferred
+>
+>  * palliative discharge
+
+> Uncensored:
+>
+>  * death
+
+Without more information it will be ill-advised to assume that death is the final outcome of patients released under palliative discharge.  Especially because in addition to *end of life care*, palliative care also includes *supportive care* for curable diseases, i.e., support for patients that are expected to recover, but who need critical support whilst convalescing. [@apm2019]
+
+\vspace{20pt}
+
+## Missing Data
+
+Most of the data's variables have missing values.  Prior to deciding how to address missing values, it is important to understand the missing values patterns [@steyerberg2010]. Rubin [@rubin1976, @steyerberg2010, @little2019] outlines three fundamental missing data mechanisms
+
+\vspace{10pt}
+
+* Missing Completely at Random (MCAR): administrative errors, accident.
+
+* Missing at Random (MAR): missing data associated with known patient characteristics [independent variables], or the outcome.
+
+* Missing Not at Random (MNAR): missing data associated with missing values of the factor/predictor in question or with unobserved predictors.
+
+\vspace{10pt}
+
+If the missing values of a data set in question are *missing completely at random* then complete case analysis will suffice because the complete case excerpt is akin to a random sample from a complete population.  If MCAR does not hold, e.g., data is *missing at random*, then the complete case excerpt is not representative of the underlying population, therefore population inference is not possible via complete case analysis. [@steyerberg2010]
+
+The missing data mechanisms analysis [Appendix] suggests that almost all the independent variables have missing values patterns that violate MCAR.  Consequently, a multiple imputation step, in-line with the advice and protocols of [@sterne2009] & [@steyerberg2010], is part of this investigation.
+
+\vspace{20pt}
+
+## Modelling & Analysis: Potential Prognostic Factors
+
+The potential, candidate, prognostic factors are sex, age group, asthma, mild liver disease, moderate/severe liver disease, renal disease, chronic pulmonary disease, chronic neurological disorder, and malignant neoplasm.  Their effects, or otherwise, on survival probabilities, are explored via the Cox Proportional Hazard Model [@cox1972] and the Restricted Mean Survival Time [@royston2013].
+
+
+\pagebreak
+
+# RESULTS
+
+\vspace{10pt}
+
+## Descriptive Statistics
+
+The numbers of *Table 1* summarise the death, comorbidity , and demographic numbers of the investigation's data set. Of the received data set of $50,000$ records, $3,880$ are considered implausible because each has an outcome date that precedes its admission date.  Consequently, each outlined modelling and analysis step is due to $46,120$ records.
+
+\footnotesize
+```{r}
+special <- SpecialNumbers(data = data)
+
+special %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kable(
+    format = 'latex',
+    booktabs = TRUE,
+    digits = 2,
+    escape = FALSE,
+    row.names = FALSE,
+    col.names = kableExtra::linebreak(c('', 'yes', 'no', 'unknown', 'yes', 'no', 'unknown' )),
+    caption = 'Data Description')  %>%
+  kableExtra::kable_styling(position = 'center') %>%
+  kableExtra::add_header_above(c('', 'N' = 3, 'Percentage' = 3)) %>%
+  kableExtra::column_spec(column = 1, latex_column_spec = "p{0.17\\\\linewidth}l")
+
+```
+\normalsize
+
+\pagebreak
+
+The graph of *fig. 1* illustrates the degree of correlation between the potential prognostic factors.  The embedded Cramer's V values suggest weak associations only; the degree of freedom per cell is one.
+
+\vspace{20pt}
+
+```{r out.width = '65%', fig.align = 'center', results = 'hide', warning = FALSE, message = FALSE, fig.cap = 'Is there a degree of correlation between predictors?'}
+CorrelationOfPredictors(
+  predictors = c('age_group', 'sex', 'asthma', 'liver_mild', 'renal', 'pulmonary',
+                 'neurological', 'liver_mod_severe', 'malignant_neoplasm'),
+  data = data)
+```
+
+\vspace{20pt}
+
+## The Null Kaplan-Meier Curves
+
+The graphs of *fig 2* illustrate the survival proportions over time.  The probability of survival drops sharply during the first 200 days, this unsteady pattern suggest that the risk of death over time might not be constant.
+
+```{r fig.height = 3.5, out.width = '85%', fig.align = 'center', warning = FALSE, message = FALSE, fig.cap = "The null survival curves, whereby (A) is based on complete cases only, whilst (B) is based on all plausible records after multiple imputation."}
+KaplanMeier()
+```
+
+\pagebreak
+
+## Univariate Analysis: Cox Proportional Hazards Model
+
+This Cox Proportional Hazard Model uni-variate analysis models & analyses the separate effect of each potential prognostic factor on survival probability.  The analysis is via the imputed data set, which excludes the *3,880* implausible observation, i.e., there are *46,120* records; *50,000* - *3,880*.
+
+In terms of age groups, the reference age group is *80 – 89*, and their $p_{value}$ scores suggests that **(a)** each age group, except *90+*, has a lower risk of death compared to age group *80 – 89*, and **(b)** the risk of death increases with age.  The sex $p_{value}$ suggests that females have a lower risk of death compared to males.  The $p_{value}$ scores for patients with an asthma, renal disease, pulmonary disease, or malignant neoplasm, diagnosis suggests that these patients have a higher risk of death compared to their respective disease/disorder free counterparts.
+
+Alas, the proportionality tests invalidate most of the preceding observations; age group, malignant neoplasm, and neurological disorder have a score test value below $0.05$, i.e., the proportionality assumption does not hold.  The multivariate analysis confirms this observation.
+
+\vspace{20pt}
+
+\footnotesize
+```{r}
+diagnostics <- UnivariateAnalysisData()
+
+diagnostics %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kable(
+    format = 'latex',
+    booktabs = TRUE,
+    digits = 3,
+    escape = FALSE,
+    col.names = kableExtra::linebreak(c('', 'coefficient', 'hazard\nratio', 'lower',
+                                        'upper', '$p_{value}$', '${U}$' )),
+    caption = 'Univariate Analysis: Imputed Data', position = '!ht') %>%
+  kableExtra::kable_styling(position = 'center') %>%
+  kableExtra::add_header_above(c('', '', '', 'hazard ratio\nCI' = 2, '', '')) %>%
+  kableExtra::add_footnote(c('CI: Confidence Interval',
+                             'U: Proportionality score test'), notation = "number")  %>%
+  kableExtra::column_spec(column = 1, latex_column_spec = "p{0.20\\\\linewidth}l") %>%
+  kableExtra::column_spec(column = 2, latex_column_spec = "r")
+```
+\normalsize
+
+\pagebreak
+
+## Multivariate Analysis: Cox Proportional Hazards Model
+
+Similar to the univariate analysis, the proportionality tests invalidate the multivariate analysis results of *table 3*; age group, malignant neoplasm, and neurological disorder have score test values below $0.05$.
+
+\footnotesize
+```{r}
+diagnostics <- MultivariateAnalysisData()
+
+diagnostics %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kable(
+    format = 'latex',
+    booktabs = TRUE,
+    digits = 3,
+    escape = FALSE,
+    col.names = kableExtra::linebreak(c('', 'coefficient', 'hazard\nratio', 'lower',
+                                        'upper', '$p_{value}$', '${U}$' )),
+    caption = 'Multivariate Analysis: Imputed Data', position = '!ht') %>%
+  kableExtra::kable_styling(position = 'center') %>%
+  kableExtra::add_header_above(c('', '', '', 'hazard ratio\nCI' = 2, '', '')) %>%
+  kableExtra::add_footnote(c('CI: Confidence Interval',
+                             'U: Proportionality score test'), notation = "number")  %>%
+  kableExtra::column_spec(column = 1, latex_column_spec = "p{0.20\\\\linewidth}l") %>%
+  kableExtra::column_spec(column = 2, latex_column_spec = "r")
+```
+\normalsize
+
+\pagebreak
+
+## Unadjusted & Adjusted Analysis: Restricted Mean Survival Time
+
+The restricted mean survival time (RMST) is an alternative survival analysis approach, especially when the risk over time might be inconstant and/or the Cox Proportional Hazards Model assumptions do not hold. The restricted mean survival time is *... a measure of average survival from time 0 to a specified time point ...* [@royston2013]  The results of *Table ...* summarise the unadjusted and adjusted uni-variate RMST analysis of the named predictors.
+
+In the case of the adjusted analysis, a continuous variable field of age group medians, instead of the age group field, is used; access to the original age values would have been much better.  As usual, the adjusted analysis is the case whereby a single predictor is in focus whilst controlling for other variables/predictors, and the hypotheses per predictor are
+
+\vspace{15pt}
+
+* $H_{0}: \tau_{yes} = \tau_{no}$
+* $H_{1}: \tau_{yes} \neq \tau_{no}$
+
+\vspace{15pt}
+
+Wherein the null hypothesis is that the survival time w.r.t. (with respect to) yes responses is equivalent to the survival time w.r.t. no responses.  Noting that the specified time point is 267 days $\longrightarrow$ minimum of the *maximum time to outcome* across all predictors
+
+\vspace{15pt}
+
+```r
+  # for a single predictor
+  min(max(data[data[, predictor] == 1, 'time_to_outcome']),
+      max(data[data[, predictor] == 0, 'time_to_outcome']))
+```
+
+\vspace{15pt}
+
+Then the **adjusted analysis results** of *table 4* suggests that within a 267 days limit,
+
+* on average female patients survived 18.46 days longer than males.
+* the survival days of patients with malignant neoplasm is approximately 18 days shorter than those without.
+* on average patients with a neurological disorder had approximately 31 fewer survival days.
+* on average patients with a pulmonary disease had approximately 12 fewer survival days.
+* on average patients with a renal had approximately 13 fewer survival days.
+
+There are no other significant results.  Further analysis, much more appropriate data, e.g., continuous age values, and a wider range of potential factors [@docherty2021], is required in order to make definitive conclusions.
+
+\footnotesize
+```{r}
+diagnostics <- RMST()
+
+diagnostics %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kable(
+    format = 'latex',
+    booktabs = TRUE,
+    digits = 2,
+    escape = FALSE,
+    col.names = kableExtra::linebreak(c('', 'est.', 'lower', 'upper', '$p_{value}$',
+                                        'est.', 'lower', 'upper', '$p_{value}$')),
+    caption = 'Restricted Mean Survival Time Modelling and Analysis', position = '!ht') %>%
+    kableExtra::kable_styling(position = 'center') %>%
+    kableExtra::add_header_above(c('', '', 'CI' = 2, '', '', 'CI' = 2, '')) %>%
+    kableExtra::add_header_above(c('', 'Unadjusted' = 4, 'Adjusted' = 4)) %>%
+    kableExtra::column_spec(column = 1, latex_column_spec = "p{0.20\\\\linewidth}l")
+```
+\normalsize
+
+\vspace{65pt}
+
+\pagebreak
+
+# DISCUSSION
+
+## The Cox Model Assumptions
+
+**The observations are independent**: This assumption requires a set of observations wherein the patients are not related or associated.  If there are clusters of relations or associates, the clusters should be, must be, indicated as-such.   By virtue of the > study's design, it is quite possible that the observations are not independent - families, friends, and colleagues living in the same area will probably be admitted to the same health centre.   Alas, the data set does not have cluster indicators, hence it is impossible to definitively test and state the independence, or otherwise, of the observations.
+
+**Independent Censoring**:  There is neither evidence to suggest nor rule-out <span style="color: brown;">outcomes due to systematic drop-outs, induced by study design flaws</span>.  What are the prognosis of patients released to palliative care or transferred?  Is the decision to transfer or release to palliative care influenced or dictated by *lower* survival probability?  If the answer to the latter question is yes - it will be in breach of independent censoring.
+
+**Proportional Hazards**: The proportionality tests illustrated that the data violates the proportionality assumption.
+
+\vspace{20pt}
+
+## Missing Data
+
+Within a missing values setting, there are 2 options w.r.t. predictor effect analysis [@steyerberg2010]
+
+* complete case analysis for the uni-variate analysis, and complete case predictors & imputed confounding variables for adjusted analysis.
+* uni-variate and adjusted analysis after imputation of all missing values.
+
+The investigation opted for the latter, due to the missing data patterns observed (Appendix)
+
+\vspace{20pt}
+
+## Bias
+
+There are a few possible bias points.  By virtue of the study's design pre-study--admission differences between hospitals is possible due to the ambiguity of the study's patient recruitment terms, and this might lead to post-study differences.  In a nutshell, the study is susceptible to selection bias. [Trochim]  Bias due to missing data [@sterne2009].
+
+\vspace{20pt}
+
+## NHS England COVID-19 Hospital Activity & ISARIC Study Excerpt
+
+It is probably impossible to compare the study's patient population to the NHS England patient population of the same
+time period.  There are a few reasons why $\longrightarrow$ the COVID-19 Hospital Activity Data:
+
+* Does not include a daily record of new COVID-19 patients admissions.  Instead, it continuously updates a number
+that denotes *the number of admitted COVID-19 patients that were still in hospital during the last 24 hours*
+* Does not include in-hospital COVID-19 deaths.
+* Has a different age groups demarcation: `[0  5]`, `[6  17]`, `[18  64]`, `[65  84]`, `85+`
+
+Hence, even if the results had been conclusive, inference to the population might have been tricky.
+
+
+\pagebreak
+
+# CONCLUSION
+
+The results of the investigation are inconclusive. Modelling and analysis could not proceed via the Cox Proportional Hazards model due to the violation of the proportionality assumption.  The restricted mean survival time analysis suggest that sex, malignant neoplasm, neurological disorder, pulmonary disease, and renal disease might have a significant impact on in-hospital coronavirus 19 disease survival.   The analysis of missing values hints at flaws in data collection.
+
+\pagebreak
+
+\appendix
+
+\section{Appendices}
+
+\subsection{Exploratory Analysis}
+
+The study's female/male population is not representative of England's population, therefore population inference is not appropriate.
+
+```{r fig.height = 3.5, out.width = '49%', fig.align = 'center', warning = FALSE, message = FALSE, fig.cap = "Is the investigation's population representative of England's population?"}
+Is()
+```
+
+\vspace{10pt}
+
+\subsection{Missing Data}
+
+The clusters, patterns, associations, in relation to missing values.
+
+\vspace{10pt}
+
+```{r out.width = '65%', fig.align = 'center', fig.cap = 'Fractions denoting the instance proportions whereby a pair of predictors are both NA values'}
+PatternDendogramNA(data = data)
+```
+
+\vspace{10pt}
+
+```{r out.width = '65%', fig.align = 'center', fig.cap = 'The proportion of missing values per predictor variable'}
+PatternVariableNA(data = data)
+```
+
+\vspace{10pt}
+
+```{r warning = FALSE, message = FALSE, include = FALSE}
+diagnostics <- Test(data = data)
+
+diagnostics %>%
+  dplyr::mutate_all(linebreak) %>%
+    kableExtra::kable(
+      format = 'latex',
+      booktabs = TRUE,
+      digits = 2,
+      escape = FALSE,
+      row.names = FALSE,
+      col.names = kableExtra::linebreak(c('Missing Value\nCells of', 'Associated with one or more\naux./pred. variables' )),
+      caption = 'Data Description') %>%
+    kableExtra::column_spec(column = 1, latex_column_spec = "p{0.3\\\\linewidth}l")
+```
+
+\pagebreak
+\pagebreak
+<!--- # References {#references .unnumbered} --->
+# References
+
+
