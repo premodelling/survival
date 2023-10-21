@@ -30,7 +30,7 @@ KaplanMeier <- function () {
     data = data_,
     caption = str_glue('B. {nrow(data_)} records'))
 
-  left + patchwork::plot_spacer() + right
+  left + right
 
 }
 
