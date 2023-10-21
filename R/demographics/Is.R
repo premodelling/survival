@@ -42,6 +42,7 @@ Is <- function () {
     ggplot() +
     geom_bar(mapping = aes(x = age_group, y = `Female/Male Ratio`, fill = Case),
              stat = 'identity', position = position_dodge2(), alpha = 0.35) +
+    scale_fill_manual(values = c('orange', 'black')) +
     theme_minimal() +
     theme(panel.grid.minor = element_blank(),
           panel.grid.major = element_line(size = 0.15),
