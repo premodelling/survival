@@ -54,8 +54,8 @@ DiseaseNumbers <- function (data) {
 
   disease <- c('asthma', 'liver_mild', 'liver_mod_severe',
             'malignant_neoplasm', 'neurological', 'pulmonary', 'renal')
-  name <- c('Asthma', 'Mild Liver\nDisease', 'Moderate, Severe\nLiver Disease',
-            'Malignant Neoplasm', 'Neurological\nDisorder', 'Pulmonary Disease', 'Renal Disease')
+  name <- c('Asthma', 'Mild Liver Disease', 'Moderate, Severe Liver Disease',
+            'Malignant Neoplasm', 'Neurological Disorder', 'Pulmonary Disease', 'Renal Disease')
   labels <- data.frame(disease = disease, variable = name)
 
   diseases <- data %>%
