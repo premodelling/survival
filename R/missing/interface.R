@@ -44,3 +44,8 @@ instances <- data[, variables]
 details <- mapply(FUN = MechanismTest, predictor = focus,
                   MoreArgs = list(instances = instances))
 data.frame(t(details))
+
+calculations <- data.frame(t(details)) %>%
+  mutate(na_of = row.names(.))
+calculations %>%
+  select(na_of, associations, elements)
